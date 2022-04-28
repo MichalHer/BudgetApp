@@ -5,8 +5,8 @@ from sqlalchemy.sql.expression import text
 from .database import Base
 
 association_table = Table('association', Base.metadata,
-    Column('user_id', ForeignKey('users.ID_Usr')),
-    Column('account_id', ForeignKey('accounts.ID_Acc'))
+    Column('user_id', ForeignKey('users.ID_Usr', ondelete="CASCADE")),
+    Column('account_id', ForeignKey('accounts.ID_Acc',ondelete="CASCADE"))
 )
 
 class User(Base):

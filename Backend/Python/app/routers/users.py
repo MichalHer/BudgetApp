@@ -11,7 +11,7 @@ router = APIRouter(
     tags = ['Users']
 )
 
-@router.post("/create", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
 async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     created_user = db.query(models.User).filter(models.User.nick == user.nick). first()
     if created_user:
@@ -26,8 +26,8 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 @router.get("/{id}", response_model=schemas.UserOut)
 async def get_user(id: int, db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.id == id).first()
+    user = db.query(models.User).filter(models.User.ID_Usr == id).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"User with id: {id} does not exist")
+                            detail=[{"msg": f"User with id: {id} does not exist"}])
     return user
