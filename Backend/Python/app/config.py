@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     db_password: str
     db_ip_address: str
     db_databasename: str
+    db_port: str
     jwt_secret_key: str
     jwt_algorithm: str
     jwt_expiring_minutes: int

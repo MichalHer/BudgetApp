@@ -1,8 +1,13 @@
-from sqlalchemy import Column, Integer, String, Date, BigInteger, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, BigInteger, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import text
 from .database import Base
+
+association_table = Table('association', Base.metadata,
+    Column('user_id', ForeignKey('users.ID_Usr')),
+    Column('account_id', ForeignKey('accounts.ID_Acc'))
+)
 
 class User(Base):
     __tablename__ = "users"
@@ -11,29 +16,18 @@ class User(Base):
     nick = Column(String(20), nullable=False)
     password = Column(String(255), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text("now()"))
-
-    accounts = relationship(
-        "Account", back_populates="users", cascade="all, delete-orphan"
-    )
-    transfers = relationship(
-        "Transfer", back_populates="transfers", cascade="all, delete-orphan"
-    )
-    categories = relationship(
-        "Category", back_populates="categories", cascade="all, delete-orphan"
-    )
+    accounts = relationship("Account",
+                    secondary=association_table,
+                    back_populates = "owners")
 
 class Account(Base):
     __tablename__ = "accounts"
 
     ID_Acc = Column(Integer, primary_key=True)
     name = Column(String(20), nullable=False)
-    owner = Column(Integer, ForeignKey("users.ID_usr"), nullable=False)
-    operations = relationship(
-        "Operation", back_populates="operations", cascade="all, delete-orphan"
-    )
-    predictions = relationship(
-        "Prediction", back_populates="predictions", cascade="all, delete-orphan"
-    )
+    owners = relationship("User",
+                    secondary=association_table,
+                    back_populates = "accounts")
     
 
 class Transfer(Base):
@@ -42,7 +36,6 @@ class Transfer(Base):
     ID_Tr = Column(Integer, primary_key=True)
     date = Column(Date, nullable=False)
     value = Column(BigInteger, nullable=False)
-    owner = Column(Integer, ForeignKey("users.ID_usr"), nullable=False)
     from_account = Column(Integer, ForeignKey("accounts.ID_Acc"), nullable=False)
     to_account = Column(Integer, ForeignKey("accounts.ID_Acc"), nullable=False)
 
@@ -51,7 +44,7 @@ class Category(Base):
 
     ID_Cat  = Column(Integer, primary_key=True)
     name = Column(String(20), nullable=False)
-    owner = Column(Integer, ForeignKey("users.ID_usr"), nullable=False)
+    owner = Column(Integer, ForeignKey("users.ID_Usr", ondelete="CASCADE"), nullable=False)
 
 class Prediction(Base):
     __tablename__ = "predictions"
@@ -60,9 +53,9 @@ class Prediction(Base):
     value = Column(BigInteger, nullable=False)
     purpose_of_the_expendture = Column(String(20), nullable=False)
     date = Column(Date, nullable=False)
-    account = Column(Integer, ForeignKey("accounts.ID_Acc"), nullable=False)
+    account = Column(Integer, ForeignKey("accounts.ID_Acc", ondelete="CASCADE"), nullable=False)
     category = Column(Integer, ForeignKey("categories.ID_Cat"), nullable=False)
-
+    owner = Column(Integer, ForeignKey("users.ID_Usr", ondelete="CASCADE"), nullable=False)
 
 class Operation(Base):
     __tablename__ = "operations"
@@ -71,6 +64,7 @@ class Operation(Base):
     value = Column(BigInteger, nullable=False)
     purpose_of_the_expendture = Column(String(20), nullable=False)
     date = Column(Date, nullable=False)
-    prediction = Column(Integer, ForeignKey("predictions.ID_Pred"), nullable=False)
-    account = Column(Integer, ForeignKey("accounts.ID_Acc"), nullable=False)
+    owner = Column(Integer, ForeignKey("users.ID_Usr", ondelete="CASCADE"), nullable=False)
+    prediction = Column(Integer, ForeignKey("predictions.ID_Pred"))
+    account = Column(Integer, ForeignKey("accounts.ID_Acc", ondelete="CASCADE"), nullable=False)
     category = Column(Integer, ForeignKey("categories.ID_Cat"), nullable=False)
