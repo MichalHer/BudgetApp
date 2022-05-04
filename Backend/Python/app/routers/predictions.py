@@ -6,5 +6,5 @@ router = APIRouter(
 )
 
 @router.get("/")
-async def get_price():
+async def get_predictions():
     return {"predictions":"ok"}

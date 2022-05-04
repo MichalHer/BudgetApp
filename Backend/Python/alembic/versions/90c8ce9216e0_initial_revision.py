@@ -47,7 +47,7 @@ def upgrade():
     )
     op.create_table('predictions',
     sa.Column('ID_Pred', sa.Integer(), nullable=False),
-    sa.Column('value', sa.BigInteger(), nullable=False),
+    sa.Column('value', sa.Numeric(decimal_return_scale=2), nullable=False),
     sa.Column('purpose_of_the_expendture', sa.String(length=20), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
     sa.Column('account', sa.Integer(), nullable=False),
@@ -61,7 +61,7 @@ def upgrade():
     op.create_table('transfers',
     sa.Column('ID_Tr', sa.Integer(), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
-    sa.Column('value', sa.BigInteger(), nullable=False),
+    sa.Column('value', sa.Numeric(decimal_return_scale=2), nullable=False),
     sa.Column('from_account', sa.Integer(), nullable=False),
     sa.Column('to_account', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['from_account'], ['accounts.ID_Acc'], ),
@@ -70,7 +70,7 @@ def upgrade():
     )
     op.create_table('operations',
     sa.Column('ID_Op', sa.Integer(), nullable=False),
-    sa.Column('value', sa.BigInteger(), nullable=False),
+    sa.Column('value', sa.Numeric(decimal_return_scale=2), nullable=False),
     sa.Column('purpose_of_the_expendture', sa.String(length=20), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
     sa.Column('owner', sa.Integer(), nullable=False),

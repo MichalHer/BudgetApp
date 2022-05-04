@@ -1,9 +1,8 @@
 import sqlalchemy
-from fastapi import Depends, APIRouter, status, Response, HTTPException
-from .. import models, schemas, utils
+from fastapi import Depends, APIRouter, status
+from .. import models, schemas, utils, exceptions
 from sqlalchemy.orm import Session
-from ..database import engine, get_db
-from sqlalchemy import func
+from ..database import get_db
 
 
 router = APIRouter(
@@ -11,11 +10,15 @@ router = APIRouter(
     tags = ['Users']
 )
 
+# delete user
+# change user password
+
+# create user
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
 async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     created_user = db.query(models.User).filter(models.User.nick == user.nick). first()
     if created_user:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=[{"msg": "User already exist"}])
+        exceptions.raise_user_already_exists()
     hashed_password = utils.hash(user.password)
     user.password = hashed_password
     new_user = models.User(**user.dict())
@@ -24,10 +27,10 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
     return new_user
 
+# get user by id
 @router.get("/{id}", response_model=schemas.UserOut)
 async def get_user(id: int, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.ID_Usr == id).first()
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=[{"msg": f"User with id: {id} does not exist"}])
+        exceptions.raise_user_does_not_exists()
     return user

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, BigInteger, ForeignKey, Table
+from sqlalchemy import Column, Integer, String, Date, Numeric, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import text
@@ -35,7 +35,7 @@ class Transfer(Base):
 
     ID_Tr = Column(Integer, primary_key=True)
     date = Column(Date, nullable=False)
-    value = Column(BigInteger, nullable=False)
+    value = Column(Numeric(decimal_return_scale=2), nullable=False)
     from_account = Column(Integer, ForeignKey("accounts.ID_Acc"), nullable=False)
     to_account = Column(Integer, ForeignKey("accounts.ID_Acc"), nullable=False)
 
@@ -50,7 +50,7 @@ class Prediction(Base):
     __tablename__ = "predictions"
 
     ID_Pred = Column(Integer, primary_key=True)
-    value = Column(BigInteger, nullable=False)
+    value = Column(Numeric(decimal_return_scale=2), nullable=False)
     purpose_of_the_expendture = Column(String(20), nullable=False)
     date = Column(Date, nullable=False)
     account = Column(Integer, ForeignKey("accounts.ID_Acc", ondelete="CASCADE"), nullable=False)
@@ -61,7 +61,7 @@ class Operation(Base):
     __tablename__ = "operations"
 
     ID_Op = Column(Integer, primary_key=True)
-    value = Column(BigInteger, nullable=False)
+    value = Column(Numeric(decimal_return_scale=2), nullable=False)
     purpose_of_the_expendture = Column(String(20), nullable=False)
     date = Column(Date, nullable=False)
     owner = Column(Integer, ForeignKey("users.ID_Usr", ondelete="CASCADE"), nullable=False)

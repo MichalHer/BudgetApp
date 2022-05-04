@@ -1,9 +1,9 @@
 import sqlalchemy
-from fastapi import Depends, APIRouter, status, Response, HTTPException
-from .. import models, schemas, utils, oauth2
+from fastapi import Depends, APIRouter, status
+from .. import models, schemas, utils, oauth2, exceptions
 from sqlalchemy.orm import Session
-from ..database import engine, get_db
-from sqlalchemy import func
+from ..database import get_db
+
 
 router = APIRouter(
     prefix="/accounts",
@@ -11,11 +11,18 @@ router = APIRouter(
 )
 
 @router.get("/")
-async def get_price():
+async def get_accounts():
     return {"accounts":"ok"}
 
+
+# get all user accounts
+# get account owners
+# delete user from account owners
+# change account name
+
+#create account
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.AccountOut)
-async def createAccount(account: schemas.AccountCreate, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+async def create_account(account: schemas.AccountCreate, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
         new_account = models.Account(**account.dict())
         db.add(new_account)
         db.commit()
@@ -25,15 +32,18 @@ async def createAccount(account: schemas.AccountCreate, db: Session = Depends(ge
         db.commit()
         return new_account
 
+#attach user to account
 @router.post("/attach_to/{id}", response_model=schemas.AccountOut)
-async def addUser(id: int, attached_user: schemas.UserAttaching, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+async def add_user(id: int, attached_user: schemas.UserAttaching, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     relationships = db.query(models.Account).filter(models.Account.ID_Acc == id).first()
 
     if not current_user in relationships.owners:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=[{"msg": f"operation not allowed"}])
+        exceptions.raise_option_not_allowed()
 
     attached_user_model = db.query(models.User).filter(models.User.nick == attached_user.nick).first()
+    if not attached_user_model:
+        exceptions.raise_user_does_not_exists()
+
     statement = models.association_table.insert().values(user_id=attached_user_model.ID_Usr, account_id=id)
     db.execute(statement)
     db.commit()

@@ -1,6 +1,6 @@
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
-from . import schemas, database, models
+from . import schemas, database, models, exceptions
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
@@ -20,25 +20,22 @@ def create_access_token(data: dict):
 
     return encoded_jwt
 
-def verify_access_token(token: str, credentials_exception):
+def verify_access_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         id: str = payload.get("user_id")
     
         if id is None:
-            raise credentials_exception
+            exceptions.raise_credentials_exception()
         token_data = schemas.TokenData(id = id)
     except JWTError:
-        raise credentials_exception
+        exceptions.raise_credentials_exception()
 
     return token_data
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(database.get_db)):
-    credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, 
-                                            detail=f"Could not validate credentials", 
-                                            headers={"WWW-Authenticte": "Bearer"})
 
-    token = verify_access_token(token, credentials_exception)
+    token = verify_access_token(token)
     user = db.query(models.User).filter(models.User.ID_Usr == token.id).first()
 
     return user
