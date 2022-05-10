@@ -6,7 +6,6 @@
 #Virtual environment
 venv/
 *.env
-env.py
 
 # User-specific files
 *.rsuser
@@ -391,6 +390,3 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
-
-#Another
-CalculatorGUI/
