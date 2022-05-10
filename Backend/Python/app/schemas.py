@@ -18,10 +18,19 @@ class UserOut(BaseModel):
 class AccountCreate(BaseModel):
     name: str
 
-class AccountOut(BaseModel):
+class Account(BaseModel):
     ID_Acc: int
     name: str
+    class Config:
+        orm_mode=True
+
+class AccountOut(Account):
     owners: List[UserOut]
+    class Config:
+        orm_mode=True
+
+class AccountsList(BaseModel):
+    accounts: List[Account]
     class Config:
         orm_mode=True
 
