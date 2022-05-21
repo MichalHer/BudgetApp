@@ -70,8 +70,8 @@ async def add_user(id: int, attached_user: schemas.UserAttaching, db: Session = 
     account = db.query(models.Account).filter(models.Account.ID_Acc==id).first()
     return account
 
-# delete user from account owners
-@router.delete("/delete_user_from/{id}", response_model=schemas.AccountOut)
+# detach user from account owners
+@router.delete("/detach_user_from/{id}", response_model=schemas.AccountOut)
 async def add_user(id: int, attached_user: schemas.UserAttaching, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     account_query = db.query(models.Account).filter(models.Account.ID_Acc == id)
     account = account_query.first()
