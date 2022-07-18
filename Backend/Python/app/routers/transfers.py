@@ -6,7 +6,6 @@ router = APIRouter(
 )
 
 #get transfers (month -> from account -> to account)
-#get transfer
 #create transfer
 #edit transfer
 #remove transfer

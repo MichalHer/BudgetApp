@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, date
 
 class UserAttaching(BaseModel):
     nick: str
@@ -34,11 +34,6 @@ class AccountOut(Account):
     class Config:
         orm_mode=True
 
-class AccountsList(BaseModel):
-    accounts: List[Account]
-    class Config:
-        orm_mode=True
-
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -53,9 +48,26 @@ class CreateCategoryInput(BaseModel):
         
 class CreateCategoryOutput(CreateCategoryInput):
     ID_Cat: int
-
         
-class CategoryList(BaseModel):
-    categories: List[CreateCategoryOutput]
+class PredictionIn(BaseModel):
+    value: float
+    purpose_of_the_expendture: str
+    date: date
+    account: int
+    category:int
+    class Config:
+        orm_mode=True
+    
+class PredictionOut(PredictionIn):
+    ID_Pred: int
+    class Config:
+        orm_mode=True
+        
+class PredictionChange(BaseModel):
+    value: Optional[float]
+    purpose_of_the_expendture: Optional[str]
+    date: Optional[date]
+    account: Optional[int]
+    category:Optional[int]
     class Config:
         orm_mode=True

@@ -5,9 +5,8 @@ router = APIRouter(
     tags = ['Operations']
 )
 
-#get operations (by month -> account -> categories -> predictions)
-#get operation
 #create operation
+#get operations (by month -> account -> categories -> predictions)
 #edit operation
 #remove operation
 

@@ -3,6 +3,7 @@ from fastapi import Depends, APIRouter, status
 from .. import models, schemas, utils, oauth2, exceptions
 from sqlalchemy.orm import Session
 from ..database import get_db
+from typing import List
 
 
 router = APIRouter(
@@ -11,10 +12,10 @@ router = APIRouter(
 )
 
 # get all user accounts
-@router.get("/", response_model=schemas.AccountsList)
+@router.get("/", response_model=List[schemas.AccountOut])
 async def get_accounts_list(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     accounts_list = db.query(models.Account).filter(models.Account.owners.contains(current_user)).all()
-    return {"accounts":accounts_list}
+    return accounts_list
 
 # get account info
 @router.get("/{id}", response_model=schemas.AccountOut)
