@@ -71,3 +71,21 @@ class PredictionChange(BaseModel):
     category:Optional[int]
     class Config:
         orm_mode=True
+
+class Operation(BaseModel):
+    value: float
+    purpose_of_the_expendture: str
+    date: date
+    prediction : Optional[int]
+    account : int
+    category: int
+    class Config:
+        orm_mode=True
+        
+class Transfer(BaseModel):
+    date: date
+    value: float
+    from_account: int
+    to_account: int
+    class Config:
+        orm_mode=True

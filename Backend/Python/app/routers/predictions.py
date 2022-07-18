@@ -31,7 +31,8 @@ def get_predictions(db:Session = Depends(get_db), current_user:models.User=Depen
         right_date = f"{year}-{month+1}-01"
     else:
         right_date = f"{year+1}-01-01"
-    prediction_query = db.query(models.Prediction).filter(models.Prediction.date.between(left_date,right_date))
+    prediction_query = db.query(models.Prediction).filter((models.Prediction.date.between(left_date,right_date)),
+                                                          (models.Prediction.owner == current_user.ID_Usr))
     predictions = prediction_query.all()
     if category_id != 0: predictions = list(filter(lambda x: x.category == category_id,predictions))
     if account_id != 0: predictions = list(filter(lambda x: x.account == account_id,predictions))
