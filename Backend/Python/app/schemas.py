@@ -8,6 +8,11 @@ class UserAttaching(BaseModel):
 class UserCreate(BaseModel):
     nick: str
     password: str
+    class Config:
+        orm_mode=True
+    
+class ChangePassword(BaseModel):
+    password: str
 
 class UserOut(BaseModel):
     nick: str
@@ -40,3 +45,17 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     id: Optional[str] = None
+    
+class CreateCategoryInput(BaseModel):
+    name: str
+    class Config:
+        orm_mode=True
+        
+class CreateCategoryOutput(CreateCategoryInput):
+    ID_Cat: int
+
+        
+class CategoryList(BaseModel):
+    categories: List[CreateCategoryOutput]
+    class Config:
+        orm_mode=True

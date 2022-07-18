@@ -17,25 +17,20 @@ def create_access_token(data: dict):
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-
     return encoded_jwt
 
 def verify_access_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         id: str = payload.get("user_id")
-    
         if id is None:
             exceptions.raise_credentials_exception()
         token_data = schemas.TokenData(id = id)
     except JWTError:
         exceptions.raise_credentials_exception()
-
     return token_data
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(database.get_db)):
-
     token = verify_access_token(token)
     user = db.query(models.User).filter(models.User.ID_Usr == token.id).first()
-
     return user
