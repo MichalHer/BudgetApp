@@ -23,7 +23,6 @@ def create_transfer(transfer:schemas.Transfer, db:Session = Depends(get_db), cur
     db.refresh(new_transfer)
     return new_transfer
     
-    
 #get transfers (month -> from account -> to account)
 #edit transfer
 #remove transfer
