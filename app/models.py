@@ -34,6 +34,7 @@ class Transfer(Base):
     __tablename__ = "transfers"
 
     ID_Tr = Column(Integer, primary_key=True)
+    owner = Column(Integer, ForeignKey("users.ID_Usr", ondelete="CASCADE"), nullable=False)
     date = Column(Date, nullable=False)
     value = Column(Numeric(decimal_return_scale=2), nullable=False)
     from_account = Column(Integer, ForeignKey("accounts.ID_Acc"), nullable=False)

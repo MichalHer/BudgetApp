@@ -81,11 +81,22 @@ class Operation(BaseModel):
     category: int
     class Config:
         orm_mode=True
-        
-class Transfer(BaseModel):
+
+class TransferIn(BaseModel):
     date: date
     value: float
     from_account: int
     to_account: int
+    class Config:
+        orm_mode=True
+        
+class Transfer(TransferIn):
+    ID_Tr: int
+        
+class TransferChange(BaseModel):
+    date: Optional[date]
+    value: Optional[float]
+    from_account: Optional[int]
+    to_account: Optional[int]
     class Config:
         orm_mode=True
