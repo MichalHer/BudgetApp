@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block body %} 
+    <h1>Dashboard</h1>
+    <p>Witaj {{ current_user.username }}</p>
+    <a href="{{url_for('logout')}}">Wyloguj</a>
+{% endblock body %}  

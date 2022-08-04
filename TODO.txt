@@ -1,1 +1,0 @@
-1. Napisać trigger, który będzie kasował konta których nie ma już na liście asocjacyjnej po każdym usunięciu użytkownika
