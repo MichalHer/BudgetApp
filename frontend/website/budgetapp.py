@@ -1,12 +1,5 @@
-from flask import Flask, Blueprint, render_template, url_for, redirect
-from flask_bcrypt import Bcrypt
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-from . import login_manager
+from flask import Blueprint, render_template
+from flask_login import login_required, current_user
 
 budgetapp = Blueprint('budgetapp', __name__)
 
