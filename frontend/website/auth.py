@@ -3,6 +3,7 @@ from flask_login import login_user, login_required, logout_user
 from . import db, bcrypt, login_manager
 from .models import User
 from .forms import LoginForm, RegisterForm
+import requests
 
 auth = Blueprint('auth', __name__)
     
@@ -27,9 +28,18 @@ def register():
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
         new_user = User(username=form.username.data, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect(url_for('auth.login'))
+        api_json = {
+            "nick": f"{new_user.username}",
+            "password": "fdfsdfsadfdsavcxd"
+        }
+        r = requests.post("http://127.0.0.1:8000/users", json=api_json,)
+        if r.status_code == 201:
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for('auth.login'))
+        else:
+            info = "Nie udało się utworzyć konta, spróbuj później"
+            return render_template('/register.html', form=form, info=info)
     return render_template('/register.html', form=form)
 
 @auth.route('/logout', methods=["GET", 'POST'])
