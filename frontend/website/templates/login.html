@@ -2,10 +2,18 @@
 {% block title %}Login{% endblock %}
 {% block body %} 
     <h1>Zaloguj się</h1>
-    <form method="POST" action="">
-        {{ form.hidden_tag() }}
-        {{ form.username }}
-        {{ form.password }}
-        {{ form.submit }}
-    <a href="{{url_for('auth.register')}}">Strona rejestracji</a>
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Nazwa użytkownika</span>
+                {{ form.username }}
+            </div>
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Hasło</span>
+                {{ form.password }}
+            </div>
+            {{ form.submit }}
+        </form>
+        <a class="nav-link" href="{{url_for('auth.register')}}">Strona rejestracji</a>
+    </div>
 {% endblock body %}  

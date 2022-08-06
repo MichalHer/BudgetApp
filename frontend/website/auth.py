@@ -29,7 +29,6 @@ def register():
         new_user = User(username=form.username.data, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
-        print(f"registering user {new_user.username} ok.")
         return redirect(url_for('auth.login'))
     return render_template('/register.html', form=form)
 

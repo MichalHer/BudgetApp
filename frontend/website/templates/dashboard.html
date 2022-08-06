@@ -1,7 +1,6 @@
-{% extends 'base.html' %}
-{% block title %}Login{% endblock %}
+{% extends 'app_base.html' %}
+{% block title %}Budgetapp - Dashboard{% endblock %}
 {% block body %} 
-    <h1>Dashboard</h1>
-    <p>Witaj {{ current_user.username }}</p>
-    <a href="{{url_for('auth.logout')}}">Wyloguj</a>
+        <h1>Dashboard</h1>
+        <p>Witaj {{ current_user.username }}</p>
 {% endblock body %}  

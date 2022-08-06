@@ -1,10 +1,7 @@
 {% extends 'base.html' %}
-
-{% block title%}Login{% endblock %}
-{% block body %}
-
-<h1>Witaj w BudgetApp</h1>
-<a href="{{url_for('auth.login')}}">Strona logowania</a></br>
-<a href="{{url_for('auth.register')}}">Strona rejestracji</a>
-
-{% endblock %}
+{% block title %}Witaj w Budgetapp{% endblock %}
+{% block body %} 
+    <h1>Witaj w BudgetApp</h1>
+    <a class="nav-link" href="{{url_for('auth.login')}}">Strona logowania</a></br>
+    <a class="nav-link" href="{{url_for('auth.register')}}">Strona rejestracji</a>
+{% endblock body %}  

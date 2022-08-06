@@ -1,16 +1,18 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
-from. models import User
+from .models import User
 
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(
-        min=4, max=50)], render_kw={"placeholder":"Nazwa Użytkownika"})
+        min=4, max=50)], render_kw={"class":"form-control", "aria-label":"Sizing example input", "aria-describedby":"inputGroup-sizing-sm"})
+    
+    
     
     password = PasswordField(validators=[InputRequired(), Length(
-        min=4, max=50)], render_kw={"placeholder": "Hasło"})
+        min=4, max=50)], render_kw={"class":"form-control", "aria-label":"Sizing example input", "aria-describedby":"inputGroup-sizing-sm"})
     
-    submit = SubmitField("Zarejestruj")
+    submit = SubmitField("Zarejestruj", render_kw={"type":"submit", "class":"btn btn-primary"})
     
     def validate_username(self, username):
         existing_username = User.query.filter_by(
@@ -20,9 +22,9 @@ class RegisterForm(FlaskForm):
         
 class LoginForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(
-        min=4, max=50)], render_kw={"placeholder":"Nazwa Użytkownika"})
+        min=4, max=50)], render_kw={"class":"form-control", "aria-label":"Sizing example input", "aria-describedby":"inputGroup-sizing-sm"})
     
     password = PasswordField(validators=[InputRequired(), Length(
-        min=4, max=50)], render_kw={"placeholder": "Hasło"})
+        min=4, max=50)], render_kw={"class":"form-control", "aria-label":"Sizing example input", "aria-describedby":"inputGroup-sizing-sm"})
     
-    submit = SubmitField("Zaloguj")
+    submit = SubmitField("Zaloguj", render_kw={"type":"submit", "class":"btn btn-primary"})
