@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
 import requests
 from . import bcrypt
@@ -12,7 +12,7 @@ budgetapp = Blueprint('budgetapp', __name__)
 def dashboard():
     return render_template('/dashboard.html', current_user=current_user)
 
-@budgetapp.route('/accounts', methods=['GET', 'POST'])
+@budgetapp.route('/accounts', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @login_required
 def accounts():
     api_url = "http://127.0.0.1:8000"
@@ -26,13 +26,14 @@ def accounts():
         return render_template('/accounts.html', current_user=current_user, info=info)
     token_json = token.json()
     headers = {"Authorization":f"{token_json['token_type']} {token_json['access_token']}"}
-    accounts_list_req = requests.get(f"{api_url}/accounts", headers=headers)
-    if accounts_list_req.status_code == 200:
-        accounts = json.loads(accounts_list_req._content.decode())
-        print(accounts)
-        return render_template('/accounts.html', current_user=current_user, accounts=accounts)
-    info = "Wystąpił błąd"
-    return render_template('/accounts.html', current_user=current_user, info=info)
+    if request.method == 'GET':
+        accounts_list_req = requests.get(f"{api_url}/accounts", headers=headers)
+        if accounts_list_req.status_code == 200:
+            accounts = json.loads(accounts_list_req._content.decode())
+            print(accounts)
+            return render_template('/accounts.html', current_user=current_user, accounts=accounts)
+        info = "Wystąpił błąd"
+        return render_template('/accounts.html', current_user=current_user, info=info)
 
 @budgetapp.route('/categories', methods=['GET', 'POST'])
 @login_required

@@ -73,20 +73,15 @@ async def add_user(id: int, attached_user: schemas.UserAttaching, db: Session = 
 
 # detach user from account owners
 @router.delete("/detach_user_from/{id}", response_model=schemas.AccountOut)
-async def add_user(id: int, attached_user: schemas.UserAttaching, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+async def delete_user(id: int, detached_user:schemas.UserAttaching, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     account_query = db.query(models.Account).filter(models.Account.ID_Acc == id)
     account = account_query.first()
-
     if not current_user in account.owners:
         exceptions.raise_option_not_allowed()
-
-    removed_user_model = db.query(models.User).filter(models.User.nick == attached_user.nick).first()
+    removed_user_model = db.query(models.User).filter(models.User.nick == detached_user.nick).first()
     if not removed_user_model:
         exceptions.raise_user_does_not_exists()
-
     account.owners.remove(removed_user_model)
     db.commit()
-
     db.refresh(account)
-
     return account
