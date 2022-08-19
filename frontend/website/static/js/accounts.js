@@ -2,33 +2,21 @@ import {get_accounts, delete_account, add_account, change_account_name} from "./
 
 async function accounts_table_for(username){
     const accounts = await get_accounts(username);
-    var table_html = '<tr>\
-        <th width="5%"></th>\
-        <th width="10%">id konta</th>\
-        <th width="20%">Nazwa konta</th>\
-        <th>Właściciele</th>\
-    </tr>'
+    var table_html = '<thead><tr><th scope="col" width="5%"></th><th scope="col" width="10%">id konta</th><th scope="col" width="20%">Nazwa konta</th><th scope="col">Właściciele</th></tr></thead><tbody>'
     if (accounts.length != 0){
         accounts.forEach(element => {
-            table_html += '<tr>\
-            <td>\
-                <div class="form-check">\
-                    <input class="form-check-input" type="radio" name="radio_btn" value="' + element.ID_Acc + '" id="radio_' + element.ID_Acc + '">\
-                    <label class="form-check-label" for="radio_' + element.ID_Acc + '">\
-                    </label>\
-                </div>\
-            </td>\
-            <td><a class="nav-link" href="#">' + element.ID_Acc + '</a></td>\
-            <td><a class="nav-link" href="#">' + element.name + '</a></td>\
-            <td>'
+            table_html += '<tr><th scope="row"><div class="form-check"><input class="form-check-input" type="radio" name="radio_btn" value="' + element.ID_Acc + '" id="radio_' + element.ID_Acc + 
+            '"><label class="form-check-label" for="radio_' + element.ID_Acc + '"></label></div></th><td><a class="nav-link" href="#">' + element.ID_Acc + 
+            '</a></td><td><a class="nav-link" href="#">' + element.name + '</a></td><td>'
             element.owners.forEach(element => {
                 table_html += ('| '+element.nick+' ');
             })
-            table_html += '</td>\
-            </tr>'
+            table_html += '</td></tr>'
             
         });
     }
+    table_html += '</tbody>'
+    console.log(table_html);
     document.getElementById('accounts_table').innerHTML=table_html;
 }
 
@@ -43,7 +31,6 @@ async function delete_acc() {
     }
     if (id != null){
         delete_account(user, id);
-        console.log("Done " + id);
         accounts_table_for(user);
     }
 }

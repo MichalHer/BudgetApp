@@ -29,7 +29,6 @@ export async function delete_account(username, id) {
         body: body
     });
     const data = await response.json(); 
-    console.log(data);
 }
 
 export async function add_account(username, account_name) {
@@ -44,7 +43,6 @@ export async function add_account(username, account_name) {
         body: body
     });
     const data = await response.json(); 
-    console.log(data);
 }
 
 export async function change_account_name(username, account_name, id) {
@@ -59,5 +57,4 @@ export async function change_account_name(username, account_name, id) {
         body: body
     });
     const data = await response.json(); 
-    console.log(data);
 }

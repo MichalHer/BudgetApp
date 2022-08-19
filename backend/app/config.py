@@ -3,7 +3,6 @@ import logging
 from datetime import date
 
 class Settings(BaseSettings):
-
     db_username: str
     db_password: str
     db_ip_address: str

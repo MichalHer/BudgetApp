@@ -13,13 +13,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Wpisz nazwę konta</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body"><div class="input-group input-group-sm mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-sm">Nazwa konta</span>
                     <input type="text" id="account_name" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placehoder="Nazwa konta"/>
-                </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
@@ -28,9 +27,11 @@
             </div>
         </div>
     </div>
-    <table class="table table-stripped" id="accounts_table">
-    </table>
-{% endblock body %}  
+    <div class="table-responsive">
+        <table class="table table-dark table-striped" id="accounts_table">
+        </table>
+    </div>
+{% endblock body %} 
 
 {% block scripts %}
     <script type="module" src="{{ url_for('static', filename='js/accounts.js') }}"></script>
