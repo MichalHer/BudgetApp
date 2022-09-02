@@ -10,7 +10,7 @@ router = APIRouter(
 )
 
 #create operation
-@router.post("/", response_model=schemas.Operation, status_code=201)
+@router.post("/", response_model=schemas.OperationOut, status_code=201)
 def create_operation(operation:schemas.Operation, db:Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
     new_operation = models.Operation(**operation.dict())
     new_operation.owner = current_user.ID_Usr
@@ -20,7 +20,7 @@ def create_operation(operation:schemas.Operation, db:Session = Depends(get_db), 
     return new_operation
     
 #get operations
-@router.get("/", response_model=List[schemas.Operation])
+@router.get("/", response_model=List[schemas.OperationOut])
 def get_operations(db:Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user), year:int = 1970, month:int=0,
                    category_id:Optional[int]=0, account_id:Optional[int]=0, prediction_id:Optional[int]=0):
     if year < 1970:
@@ -41,7 +41,7 @@ def get_operations(db:Session = Depends(get_db), current_user: models.User = Dep
     return operations
 
 #edit operation
-@router.patch("/{id}", response_model=schemas.Operation)
+@router.patch("/{id}", response_model=schemas.OperationOut)
 def edit_operation(id:int, new_attributes:schemas.PredictionChange, db:Session = Depends(get_db), current_user:models.User=Depends(oauth2.get_current_user)):
     operation_query = db.query(models.Operation).filter(models.Operation.ID_Op == id)
     operation = operation_query.first()

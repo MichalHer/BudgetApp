@@ -84,6 +84,11 @@ class Operation(BaseModel):
     class Config:
         orm_mode=True
 
+class OperationOut(Operation):
+    ID_Op: int
+    class Config:
+        orm_mode=True
+
 class TransferIn(BaseModel):
     date: date
     value: float
