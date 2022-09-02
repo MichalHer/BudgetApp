@@ -26,6 +26,7 @@ def get_predictions(db:Session = Depends(get_db), current_user:models.User=Depen
         exceptions.raise_year_error(year)
     if month not in range(1,13):
         exceptions.raise_month_error(month)
+        
     left_date = f"{year}-{month}-01"
     if month != 12:
         right_date = f"{year}-{month+1}-01"

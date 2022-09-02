@@ -1,3 +1,4 @@
+from email.policy import default
 from sqlalchemy import Column, Integer, String, Date, Numeric, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import TIMESTAMP
@@ -25,6 +26,7 @@ class Account(Base):
 
     ID_Acc = Column(Integer, primary_key=True)
     name = Column(String(20), nullable=False)
+    currency = Column(String(3), nullable=False, server_default="PLN")
     owners = relationship("User",
                     secondary=association_table,
                     back_populates = "accounts")

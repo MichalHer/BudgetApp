@@ -31,11 +31,11 @@ export async function delete_account(username, id) {
     const data = await response.json(); 
 }
 
-export async function add_account(username, account_name) {
+export async function add_account(username, account_name, acc_currency) {
     const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
     let headers = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
-    let body = JSON.stringify({name: account_name});
+    let body = JSON.stringify({name: account_name, currency: acc_currency});
     console.log(body);
     const response = await fetch(api_url + '/accounts',{
         method:"POST", 
@@ -45,11 +45,11 @@ export async function add_account(username, account_name) {
     const data = await response.json(); 
 }
 
-export async function change_account_name(username, account_name, id) {
+export async function change_account(username, account_name, id, acc_currency) {
     const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
     let headers = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
-    let body = JSON.stringify({name: account_name});
+    let body = JSON.stringify({name: account_name, currency: acc_currency});
     console.log(body);
     const response = await fetch(api_url + '/accounts/' + id,{
         method:"PUT", 

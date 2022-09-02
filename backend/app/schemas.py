@@ -22,10 +22,12 @@ class UserOut(BaseModel):
 
 class AccountCreate(BaseModel):
     name: str
+    currency: str
 
 class Account(BaseModel):
     ID_Acc: int
     name: str
+    currency: str
     class Config:
         orm_mode=True
 
