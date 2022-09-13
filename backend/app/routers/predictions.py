@@ -21,22 +21,19 @@ def create_prediction(prediction:schemas.PredictionIn, db:Session = Depends(get_
 
 #get predictions
 @router.get("/", response_model = List[schemas.PredictionOut])
-def get_predictions(db:Session = Depends(get_db), current_user:models.User=Depends(oauth2.get_current_user), year:int = 1970, month:int=0, category_id:Optional[int]=0, account_id:Optional[int]=0):
-    if year < 1970:
-        exceptions.raise_year_error(year)
-    if month not in range(1,13):
-        exceptions.raise_month_error(month)
-        
-    left_date = f"{year}-{month}-01"
-    if month != 12:
-        right_date = f"{year}-{month+1}-01"
-    else:
-        right_date = f"{year+1}-01-01"
-    prediction_query = db.query(models.Prediction).filter((models.Prediction.date.between(left_date,right_date)),
-                                                          (models.Prediction.owner == current_user.ID_Usr))
+def get_predictions(db:Session = Depends(get_db), current_user:models.User=Depends(oauth2.get_current_user), since: Optional[str] = None,
+                   to: Optional[str] = None, category_id:Optional[int]=None, account_id:Optional[int]=None):
+    
+    prediction_query = db.query(models.Prediction).filter((models.Prediction.owner == current_user.ID_Usr))
+
+    if since != None:
+        prediction_query = prediction_query.filter((models.Prediction.date >= since))
+    if to != None:
+        prediction_query = prediction_query.filter((models.Prediction.date <= to))
+    
     predictions = prediction_query.all()
-    if category_id != 0: predictions = list(filter(lambda x: x.category == category_id,predictions))
-    if account_id != 0: predictions = list(filter(lambda x: x.account == account_id,predictions))
+    if category_id != None: predictions = list(filter(lambda x: x.category == category_id,predictions))
+    if account_id != None: predictions = list(filter(lambda x: x.account == account_id,predictions))
     return predictions
 
 #edit prediction

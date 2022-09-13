@@ -3,4 +3,56 @@
 {% block body %} 
         <h1>Dashboard</h1>
         <p>Witaj {{ current_user.username }}</p>
+        <div class="container">
+                <div class="row-cols-2">
+                        <div class="col">
+                                <div>
+                                        <span>
+                                                <h2>Stan Kont</h2>
+                                        </span>
+                                        <div class="table-responsive">
+                                                <table class="table table-striped" id="dashboard_accounts_table">
+                                                </table>
+                                        </div>
+                                </div>
+
+                        </div>
+                </div>
+                <div class="row">
+                        <div class="col">
+                                <div>
+                                        <span>
+                                                <h2>Szczegółowe podsumowanie miesiąca</h2>
+                                        </span>
+                                        <div class="table-responsive">
+                                                <table class="table table-striped" id="dashboard_current_month">
+                                                        <thead>
+                                                                <tr>
+                                                                        <td width="10%"></td>
+                                                                        <td width="20%"><input id="date_from" class="form-control" type="text" placeholder="Data od" aria-label="date_since"></td>
+                                                                        <td width="20%"><input id="date_to" class="form-control" type="text" placeholder="Data do" aria-label="date_to"></td>
+                                                                        <td width="20%"></td>
+                                                                        <td width="20%"></td>
+                                                                        <td width="10%"><button id="filter_btn" type="button" class="btn btn-primary">Filtruj</button></td>
+                                                                </tr>
+                                                                <tr>
+                                                                        <td>Data</td>
+                                                                        <td>Konto</td>
+                                                                        <td>Nazwa</td>
+                                                                        <td>Prognoza</td>
+                                                                        <td>Operacje</td>
+                                                                        <td>Bilans</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="dashboard_current_month_body">
+                                                            </tbody>
+                                                </table>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
 {% endblock body %}  
+{% block scripts %}
+    <script type="module" src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock scripts %}

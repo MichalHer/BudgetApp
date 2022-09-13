@@ -12,7 +12,15 @@ async function login(username, password) {
 export async function get_operations(username) {
     const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
     var auth = {"Authorization": token_type + ' ' + access_token};
-    const response = await fetch(api_url + '/operations?year=2022&month=9',{method: "GET", headers: auth})
+    const response = await fetch(api_url + '/operations',{method: "GET", headers: auth})
+    const data = await response.json(); 
+    return data
+}
+
+export async function get_operation(username, id) {
+    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
+    var auth = {"Authorization": token_type + ' ' + access_token};
+    const response = await fetch(api_url + '/operations/' + id,{method: "GET", headers: auth})
     const data = await response.json(); 
     return data
 }

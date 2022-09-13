@@ -3,6 +3,7 @@ from typing import Optional, List
 from sqlalchemy.orm import Session
 from .. import schemas, models, oauth2, exceptions
 from ..database import get_db
+import datetime
 
 router = APIRouter(
     prefix="/operations",
@@ -21,23 +22,20 @@ def create_operation(operation:schemas.Operation, db:Session = Depends(get_db), 
     
 #get operations
 @router.get("/", response_model=List[schemas.OperationOut])
-def get_operations(db:Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user), year:int = 1970, month:int=0,
-                   category_id:Optional[int]=0, account_id:Optional[int]=0, prediction_id:Optional[int]=0):
-    if year < 1970:
-        exceptions.raise_year_error(year)
-    if month not in range(1,13):
-        exceptions.raise_month_error(month)
-    left_date = f"{year}-{month}-01"
-    if month != 12:
-        right_date = f"{year}-{month+1}-01"
-    else:
-        right_date = f"{year+1}-01-01"
-    operations_query = db.query(models.Operation).filter((models.Operation.date.between(left_date,right_date)),
-                                                          (models.Operation.owner == current_user.ID_Usr))
+def get_operations(db:Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user), since: Optional[str] = None,
+                   to: Optional[str] = None, category_id:Optional[int]=None, account_id:Optional[int]=None, prediction_id:Optional[int]=None):
+
+    operations_query = db.query(models.Operation).filter((models.Operation.owner == current_user.ID_Usr))    
+    if since != None:
+        operations_query = operations_query.filter((models.Operation.date >= since))
+    if to != None:
+        operations_query = operations_query.filter((models.Operation.date <= to))
+    
     operations = operations_query.all()
-    if category_id != 0: operations = list(filter(lambda x: x.category == category_id,operations))
-    if account_id != 0: operations = list(filter(lambda x: x.account == account_id,operations))
-    if prediction_id != 0: operations = list(filter(lambda x: x.prediction == prediction_id,operations))
+    
+    if category_id != None: operations = list(filter(lambda x: x.category == category_id,operations))
+    if account_id != None: operations = list(filter(lambda x: x.account == account_id,operations))
+    if prediction_id != None: operations = list(filter(lambda x: x.prediction == prediction_id,operations))
     return operations
 
 #edit operation

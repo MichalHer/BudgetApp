@@ -1,4 +1,5 @@
 from operator import or_
+from pyexpat import model
 from fastapi import Depends, APIRouter, Response
 from .. import schemas, models, oauth2, exceptions
 from sqlalchemy.orm import Session
@@ -28,21 +29,19 @@ def create_transfer(transfer:schemas.TransferIn, db:Session = Depends(get_db), c
     
 #get transfers (month -> from account -> to account)
 @router.get("/", response_model = List[schemas.Transfer])
-def get_transfers(db:Session = Depends(get_db), current_user:models.User=Depends(oauth2.get_current_user), year:int=1970, month:int=0, from_id:Optional[int]=0, to_id:Optional[int]=0):
-    if year < 1970:
-        exceptions.raise_year_error(year)
-    if month not in range(1,13):
-        exceptions.raise_month_error(month)
-    left_date = f"{year}-{month}-01"
-    if month != 12:
-        right_date = f"{year}-{month+1}-01"
-    else:
-        right_date = f"{year+1}-01-01"
-    transfers_query = db.query(models.Transfer).filter((models.Transfer.date.between(left_date,right_date)),
-                                                       (models.Transfer.owner == current_user.ID_Usr))
+def get_transfers(db:Session = Depends(get_db), current_user:models.User=Depends(oauth2.get_current_user), since: Optional[str] = None,
+                   to: Optional[str] = None, from_id:Optional[int]=None, to_id:Optional[int]=None):
+    
+    transfers_query = db.query(models.Transfer).filter((models.Transfer.owner == current_user.ID_Usr))
+    
+    if since != None:
+        transfers_query = transfers_query.filter((models.Transfer.date >= since))
+    if to != None:
+        transfers_query = transfers_query.filter((models.Transfer.date <= to))
+    
     transfers = transfers_query.all()
-    if from_id != 0: transfers = list(filter(lambda x: x.from_account == from_id,transfers))
-    if to_id != 0: transfers = list(filter(lambda x: x.to_account == to_id,transfers))
+    if from_id != None: transfers = list(filter(lambda x: x.from_account == from_id,transfers))
+    if to_id != None: transfers = list(filter(lambda x: x.to_account == to_id,transfers))
     return transfers
 
 #edit transfer

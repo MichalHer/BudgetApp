@@ -12,7 +12,7 @@ async function login(username, password) {
 export async function get_predictions(username) {
     const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
     var auth = {"Authorization": token_type + ' ' + access_token};
-    const response = await fetch(api_url + '/predictions?year=2022&month=9',{method: "GET", headers: auth})
+    const response = await fetch(api_url + '/predictions',{method: "GET", headers: auth})
     const data = await response.json(); 
     return data
 }

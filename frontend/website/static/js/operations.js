@@ -1,4 +1,4 @@
-import {get_operations, delete_operation, add_operation, change_operation} from "./operations_api.js";
+import {get_operations, get_operation, delete_operation, add_operation, change_operation} from "./operations_api.js";
 import {get_categories} from "./categories_api.js";
 import {get_accounts} from "./accounts_api.js";
 import {get_predictions} from "./predictions_api.js";
@@ -124,9 +124,19 @@ async function add_or_change_prediction() {
 async function unmark_radios() {
     var radios = document.getElementsByName('radio_btn');
     for (let i of radios){
-        i.checked = false;
+        if (i.checked) {
+            i.checked = false;
+        }
     }
 }
+
+async function load_marked(user){
+    var radios = document.getElementsByName('radio_btn');
+    for (let i of radios){
+        const operation_data = get_operation(user, i.value);
+    }
+}
+
 
 document.getElementById("remove_button").addEventListener("click", delete_opr);
 document.getElementById("confirm_btn").addEventListener("click", add_or_change_prediction);
