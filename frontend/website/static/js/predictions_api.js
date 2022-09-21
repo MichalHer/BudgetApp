@@ -10,27 +10,25 @@ async function login(username, password) {
 }
 
 export async function get_predictions(username) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
-    var auth = {"Authorization": token_type + ' ' + access_token};
+    const {token_type, access_token} = await login(username, apikey);
+    let auth = {"Authorization": token_type + ' ' + access_token};
     const response = await fetch(api_url + '/predictions',{method: "GET", headers: auth})
     const data = await response.json(); 
     return data
 }
 
 export async function delete_prediction(username, id) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
+    const {token_type, access_token} = await login(username, apikey);
     let auth = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
     const response = await fetch(api_url + '/predictions/' + id,{
         method:"DELETE", 
         headers:auth, 
-    }).then();
-    const data = await response.status;
-    return data
+    });
 }
 
 export async function add_prediction(username, category_id, account_id, prediction_date, prediction_pote, prediction_value) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
+    const {token_type, access_token} = await login(username, apikey);
     let headers = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
     let body = JSON.stringify({category: category_id,
@@ -49,7 +47,7 @@ export async function add_prediction(username, category_id, account_id, predicti
 }
 
 export async function change_prediction(username, category_id, account_id, prediction_date, prediction_pote, prediction_value, id) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
+    const {token_type, access_token} = await login(username, apikey);
     let headers = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
         let body = JSON.stringify({category: category_id,
@@ -66,3 +64,4 @@ export async function change_prediction(username, category_id, account_id, predi
     const data = await response.json(); 
     return data
 }
+let apikey = document.getElementById('apikey').textContent;

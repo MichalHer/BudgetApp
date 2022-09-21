@@ -29,11 +29,11 @@ def register():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
         new_user = User(username=form.username.data, password=hashed_password)
         api_json = {
-            "nick": f"{new_user.username}",
-            "password": "fdfsdfsadfdsavcxd"
+            "nick": f"{new_user.username}"
         }
         r = requests.post("http://127.0.0.1:8000/users", json=api_json,)
         if r.status_code == 201:
+            new_user.apikey = r.json()['password']
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('auth.login'))

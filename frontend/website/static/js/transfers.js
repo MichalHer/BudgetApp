@@ -1,9 +1,7 @@
 import {get_accounts} from "./accounts_api.js";
 import {get_transfers, delete_transfer, add_transfer, change_transfer} from "./transfers_api.js";
 
-async function transfers_table_for(username){
-    const accounts = await get_accounts(username);
-    const transfers = await get_transfers(username);
+async function transfers_table(){
     var table_html = '<thead><tr>\
                     <th scope="col" width="5%"></th>\
                     <th scope="col" width="10%">id transferu</th>\
@@ -27,6 +25,9 @@ async function transfers_table_for(username){
     }
     table_html += '</tbody>'
     document.getElementById('transfers_table').innerHTML=table_html;
+    document.getElementById("remove_button").addEventListener("click", delete_trans);
+    document.getElementById("confirm_btn").addEventListener("click", add_or_change_trans);
+    document.getElementById("add_button").addEventListener("click", unmark_radios);
 }
 
 async function delete_trans() {
@@ -39,7 +40,9 @@ async function delete_trans() {
         }
     }
     if (id != null){
-        delete_transfer(user, id).then(transfers_table_for(user));
+        await delete_transfer(user, id);
+        transfers = transfers.filter(x => x.ID_Tr != id);
+        transfers_table(); 
     }
 }
 
@@ -48,7 +51,7 @@ async function add_or_change_trans() {
     const to_account = document.getElementById("to_account_select").value;
     const date = document.getElementById("date").value;
     const value = document.getElementById("value").value;
-    
+    let new_transfer = null;
     const user = document.getElementById("username").textContent;
     var radios = document.getElementsByName('radio_btn');
     var id = null;
@@ -58,9 +61,14 @@ async function add_or_change_trans() {
         }
     }
     if (id != null){
-        change_transfer(user, from_account, to_account, date, value, id).then(transfers_table_for(user));
+        new_transfer = await change_transfer(user, from_account, to_account, date, value, id);
+        transfers = transfers.filter(x => x.ID_Tr != id);
+        transfers.push(new_transfer);
+        transfers_table();
     } else {
-        add_transfer(user, from_account, to_account, date, value).then(transfers_table_for(user));
+        new_transfer = await add_transfer(user, from_account, to_account, date, value);
+        transfers.push(new_transfer);
+        transfers_table();
     }
 }
 
@@ -71,8 +79,7 @@ async function unmark_radios() {
     }
 }
 
-async function modal_init(username){
-    const accounts = await get_accounts(username);
+async function modal_init(){
     var accounts_sel = '<option selected>Wybierz konto</option>'
     if (accounts.length != 0){
         accounts.forEach(element => {
@@ -81,12 +88,17 @@ async function modal_init(username){
     }
     document.getElementById('from_account_select').innerHTML=accounts_sel;
     document.getElementById('to_account_select').innerHTML=accounts_sel;
+    document.getElementById("remove_button").addEventListener("click", delete_trans);
+    document.getElementById("confirm_btn").addEventListener("click", add_or_change_trans);
+    document.getElementById("add_button").addEventListener("click", unmark_radios);
 }
 
 document.getElementById("remove_button").addEventListener("click", delete_trans);
 document.getElementById("confirm_btn").addEventListener("click", add_or_change_trans);
 document.getElementById("add_button").addEventListener("click", unmark_radios);
-const user = document.getElementById("username").textContent;
-window.onload = transfers_table_for(user);
-window.onload = modal_init(user);
+let user = document.getElementById("username").textContent;
+let accounts = await get_accounts(user);
+let transfers = await get_transfers(user);
+window.onload = transfers_table();
+window.onload = modal_init();
 

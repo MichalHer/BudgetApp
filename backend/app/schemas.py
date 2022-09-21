@@ -7,7 +7,7 @@ class UserAttaching(BaseModel):
 
 class UserCreate(BaseModel):
     nick: str
-    password: str
+    password: Optional[str]
     class Config:
         orm_mode=True
     
@@ -16,6 +16,7 @@ class ChangePassword(BaseModel):
 
 class UserOut(BaseModel):
     nick: str
+    password: str
     created_at: datetime
     class Config:
         orm_mode=True

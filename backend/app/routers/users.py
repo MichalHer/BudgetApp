@@ -1,6 +1,7 @@
 import sqlalchemy
 from fastapi import APIRouter, Depends, status, Response
 from sqlalchemy.orm import Session
+from secrets import token_urlsafe
 
 from .. import exceptions, models, schemas, utils, oauth2
 from ..database import get_db
@@ -38,12 +39,20 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     created_user = db.query(models.User).filter(models.User.nick == user.nick). first()
     if created_user:
         exceptions.raise_user_already_exists()
-    hashed_password = utils.hash(user.password)
+        
+    if user.password == None:
+        raw_password = token_urlsafe(10)
+        user.password = raw_password
+    else: 
+        raw_password = user.password
+        
+    hashed_password = utils.hash(raw_password)
     user.password = hashed_password
     new_user = models.User(**user.dict())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+    new_user.password = raw_password
     return new_user
 
 # get user by id

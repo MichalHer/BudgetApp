@@ -10,35 +10,33 @@ async function login(username, password) {
 }
 
 export async function get_operations(username) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
-    var auth = {"Authorization": token_type + ' ' + access_token};
+    const {token_type, access_token} = await login(username, apikey);
+    let auth = {"Authorization": token_type + ' ' + access_token};
     const response = await fetch(api_url + '/operations',{method: "GET", headers: auth})
     const data = await response.json(); 
     return data
 }
 
 export async function get_operation(username, id) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
-    var auth = {"Authorization": token_type + ' ' + access_token};
+    const {token_type, access_token} = await login(username, apikey);
+    let auth = {"Authorization": token_type + ' ' + access_token};
     const response = await fetch(api_url + '/operations/' + id,{method: "GET", headers: auth})
     const data = await response.json(); 
     return data
 }
 
 export async function delete_operation(username, id) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
+    const {token_type, access_token} = await login(username, apikey);
     let auth = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
     const response = await fetch(api_url + '/operations/' + id,{
         method:"DELETE", 
         headers:auth, 
-    }).then();
-    const data = await response.status;
-    return data
+    });
 }
 
 export async function add_operation(username, category_id, account_id, prediction_id, operation_date, prediction_pote, prediction_value) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
+    const {token_type, access_token} = await login(username, apikey);
     let headers = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
     let body = JSON.stringify({category: category_id,
@@ -47,7 +45,6 @@ export async function add_operation(username, category_id, account_id, predictio
                                 date: operation_date,
                                 purpose_of_the_expendture: prediction_pote,
                                 value: prediction_value});
-    console.log(body);
     const response = await fetch(api_url + '/operations',{
         method:"POST", 
         headers:headers, 
@@ -58,7 +55,7 @@ export async function add_operation(username, category_id, account_id, predictio
 }
 
 export async function change_operation(username, category_id, account_id, prediction_id, operation_date, prediction_pote, prediction_value, id) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
+    const {token_type, access_token} = await login(username, apikey);
     let headers = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
         let body = JSON.stringify({category: category_id,
@@ -67,7 +64,6 @@ export async function change_operation(username, category_id, account_id, predic
                                     date: operation_date,
                                     purpose_of_the_expendture: prediction_pote,
                                     value: prediction_value});
-    console.log(body);
     const response = await fetch(api_url + '/operations/' + id,{
         method:"PATCH", 
         headers:headers, 
@@ -76,3 +72,4 @@ export async function change_operation(username, category_id, account_id, predic
     const data = await response.json(); 
     return data
 }
+let apikey = document.getElementById('apikey').textContent;

@@ -10,51 +10,50 @@ async function login(username, password) {
 }
 
 export async function get_accounts(username) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
-    var auth = {"Authorization": token_type + ' ' + access_token};
+    const {token_type, access_token} = await login(username, apikey);
+    let auth = {"Authorization": token_type + ' ' + access_token};
     const response = await fetch(api_url + '/accounts',{method: "GET", headers: auth})
     const data = await response.json(); 
-    return data
+    return data;
 }
 
 export async function delete_account(username, id) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
+    const {token_type, access_token} = await login(username, apikey);
     let auth = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
     let body = JSON.stringify({nick: username});
-    console.log(body);
     const response = await fetch(api_url + '/accounts/detach_user_from/' + id,{
         method:"DELETE", 
         headers:auth, 
         body: body
     });
-    const data = await response.json(); 
 }
 
 export async function add_account(username, account_name, acc_currency) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
+    const {token_type, access_token} = await login(username, apikey);
     let headers = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
     let body = JSON.stringify({name: account_name, currency: acc_currency});
-    console.log(body);
     const response = await fetch(api_url + '/accounts',{
         method:"POST", 
         headers:headers, 
         body: body
     });
     const data = await response.json(); 
+    return data;
 }
 
 export async function change_account(username, account_name, id, acc_currency) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
+    const {token_type, access_token} = await login(username, apikey);
     let headers = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
     let body = JSON.stringify({name: account_name, currency: acc_currency});
-    console.log(body);
     const response = await fetch(api_url + '/accounts/' + id,{
         method:"PUT", 
         headers:headers, 
         body: body
     });
     const data = await response.json(); 
+    return data;
 }
+let apikey = document.getElementById('apikey').textContent;

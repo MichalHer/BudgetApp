@@ -10,15 +10,15 @@ async function login(username, password) {
 }
 
 export async function get_categories(username) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
-    var auth = {"Authorization": token_type + ' ' + access_token};
+    const {token_type, access_token} = await login(username, apikey);
+    let auth = {"Authorization": token_type + ' ' + access_token};
     const response = await fetch(api_url + '/categories',{method: "GET", headers: auth})
     const data = await response.json(); 
     return data
 }
 
 export async function delete_category(username, id) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
+    const {token_type, access_token} = await login(username, apikey);
     let auth = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
     let body = JSON.stringify({nick: username});
@@ -28,12 +28,10 @@ export async function delete_category(username, id) {
         headers:auth, 
         body: body
     });
-    // const data = await response.json(); 
-    // return data
 }
 
 export async function add_category(username, category_name) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
+    const {token_type, access_token} = await login(username, apikey);
     let headers = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
     let body = JSON.stringify({name: category_name});
@@ -48,7 +46,7 @@ export async function add_category(username, category_name) {
 }
 
 export async function change_category(username, category_name, id) {
-    const {token_type, access_token} = await login(username, 'fdfsdfsadfdsavcxd');
+    const {token_type, access_token} = await login(username, apikey);
     let headers = {"Authorization": token_type + ' ' + access_token,
         'Content-Type':'application/json'};
     let body = JSON.stringify({name: category_name});
@@ -61,3 +59,5 @@ export async function change_category(username, category_name, id) {
     const data = await response.json(); 
     return data
 }
+
+let apikey = document.getElementById('apikey').textContent;
