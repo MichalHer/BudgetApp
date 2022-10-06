@@ -104,16 +104,28 @@ document.getElementById("filter_btn").addEventListener("click", current_month_su
 async function current_month_summary_filter(){
     const date_from_str = document.getElementById("date_from").value;
     const date_to_str = document.getElementById("date_to").value;
-
     const date_from = Date.parse(date_from_str);
     const date_to = Date.parse(date_to_str);
-    console.log(predictions);
     const filtered_predictions = predictions.filter(x => Date.parse(x.date) >= date_from && Date.parse(x.date) <= date_to);
-    console.log(filtered_predictions)
     current_month_summary(filtered_predictions);
 }
 
+function last_day_of_month(year, month){
+    return new Date(year, month, 0).getDate();
+}
 
+function default_date_range(){
+    let date = new Date();
+    let current_month = date.getMonth()+1;
+    let current_year = date.getFullYear()
+    let date_from = `${current_year}-${current_month}-01`;
+    let date_to = `${current_year}-${current_month}-${last_day_of_month(current_year, current_month)}`
+    return [date_from, date_to];
+}
+
+let date_range = default_date_range();
+document.getElementById("date_from").value = date_range[0];
+document.getElementById("date_to").value = date_range[1];
 
 const user = document.getElementById("username").textContent;
 const transfers = await get_transfers(user);
@@ -122,7 +134,7 @@ const operations = await get_operations(user);
 const accounts = await get_accounts(user);
 
 window.onload = get_accounts_summary();
-window.onload = current_month_summary(predictions);
+window.onload = current_month_summary_filter();
 
 document.getElementById("filter_btn").addEventListener("click", current_month_summary_filter,true);
 

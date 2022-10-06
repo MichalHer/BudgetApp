@@ -69,15 +69,36 @@
             </div>
         </div>
     </div>
-    </div>
-    </div>
-    </div>
-
-    <div>
-        <div class="table-responsive">
-            <table class="table table-striped" id="operations_table">
-            </table>
+    <div class="container text-center p-3">
+        <div class="row">
+            <div class="col">
+                <select id="month" class="form-select">
+                    <option selected value="0">Wybierz miesiąc<option>
+                    <option name="month" value="1">Styczeń</option>
+                    <option name="month" value="2">Luty</option>
+                    <option name="month" value="3">Marzec</option>
+                    <option name="month" value="4">Kwiecień</option>
+                    <option name="month" value="5">Maj</option>
+                    <option name="month" value="6">Czerwiec</option>
+                    <option name="month" value="7">Lipiec</option>
+                    <option name="month" value="8">Sierpień</option>
+                    <option name="month" value="9">Wrzesień</option>
+                    <option name="month" value="10">Październik</option>
+                    <option name="month" value="11">Listopad</option>
+                    <option name="month" value="12">Grudzień</option>
+                </select>
+            </div>
+            <div class="col">
+                <input id="year" class="form-control" type="text" placeholder="Wpisz rok"></input>
+            </div>
+            <div class="col">
+                <button id="filter" type="button" class="btn btn-primary">Filtruj</button>
+            </div>
         </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped" id="operations_table">
+        </table>
     </div>
 {% endblock body %}
 

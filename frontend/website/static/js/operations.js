@@ -3,7 +3,7 @@ import {get_categories} from "./categories_api.js";
 import {get_accounts} from "./accounts_api.js";
 import {get_predictions} from "./predictions_api.js";
 
-async function operations_table(){
+async function operations_table(operations){
     let table_html = '<thead><tr>\
                     <th scope="col" width="5%"></th>\
                     <th scope="col" width="10%">ID operacji</th>\
@@ -40,7 +40,8 @@ async function operations_table(){
     document.getElementById("remove_button").addEventListener("click", delete_opr);
     document.getElementById("confirm_btn").addEventListener("click", add_or_change_prediction);
     document.getElementById("add_button").addEventListener("click", unmark_radios);
-    document.getElementById("date").addEventListener("click", load_predictions);
+    document.getElementById("date").addEventListener("change", load_predictions);
+    document.getElementById("categories_select").addEventListener("change", load_predictions);
 }
 
 async function modal_init(){
@@ -62,18 +63,24 @@ async function modal_init(){
     document.getElementById("remove_button").addEventListener("click", delete_opr);
     document.getElementById("confirm_btn").addEventListener("click", add_or_change_prediction);
     document.getElementById("add_button").addEventListener("click", unmark_radios);
-    document.getElementById("date").addEventListener("click", load_predictions);
+    document.getElementById("date").addEventListener("change", load_predictions);
+    document.getElementById("categories_select").addEventListener("change", load_predictions);
 }
 
 async function load_page(){
-    await operations_table();
+    await operations_table(operations);
     await modal_init();
 }
 
 async function load_predictions(){
+    let date = new Date(Date.parse(document.getElementById("date").value));
+    let month = date.getMonth()+1;
+    let year = date.getFullYear()
     const category_id = document.getElementById("categories_select").value;
     const account_id = document.getElementById("accounts_select").value;
-    let filtered_predictions = predictions.filter(x => x.account == account_id).filter(x => x.category == category_id)
+    let filtered_predictions = predictions.filter(x => x.category == category_id).filter(
+        x => new Date(Date.parse(x.date)).getMonth()+1 == month).filter(
+            x => new Date(Date.parse(x.date)).getFullYear() == year);
     let predictions_sel = '<option selected>Brak</option>';
     if (filtered_predictions.length != 0) {
         filtered_predictions.forEach(element => {
@@ -84,7 +91,8 @@ async function load_predictions(){
     document.getElementById("remove_button").addEventListener("click", delete_opr);
     document.getElementById("confirm_btn").addEventListener("click", add_or_change_prediction);
     document.getElementById("add_button").addEventListener("click", unmark_radios);
-    document.getElementById("date").addEventListener("click", load_predictions);
+    document.getElementById("date").addEventListener("change", load_predictions);
+    document.getElementById("categories_select").addEventListener("change", load_predictions);
 }
 
 async function delete_opr() {
@@ -99,7 +107,11 @@ async function delete_opr() {
     if (id != null){
         await delete_operation(user, id);
         operations = operations.filter(x => x.ID_Op != id);
-        await operations_table();
+        if (document.getElementById("month").value == 0 && document.getElementById("year").value == ""){
+            await operations_table(operations);
+        } else {
+            await filter();
+        }
     }
 }
 
@@ -125,13 +137,35 @@ async function add_or_change_prediction() {
             new_operation = await change_operation(user, category_id, account_id, prediction_id, prediction_date, prediction_pote, prediction_value, id).then(operations_table(user));
             operations = operations.filter(x => x.ID_Op != id);
             operations.push(new_operation);
-            await operations_table();
+            if (document.getElementById("month").value == 0 && document.getElementById("year").value == ""){
+                await operations_table(operations);
+            } else {
+                await filter();
+            }
         } else {
             new_operation = await add_operation(user, category_id, account_id, prediction_id, prediction_date, prediction_pote, prediction_value).then(operations_table(user));
             operations.push(new_operation);
-            await operations_table();
+            if (document.getElementById("month").value == 0 && document.getElementById("year").value == ""){
+                await operations_table(operations);
+            } else {
+                await filter();
+            }
         }
 }
+
+function last_day_of_month(year, month){
+    return new Date(year, month, 0).getDate();
+}
+
+async function filter(){
+    let year = document.getElementById("year").value;
+    let month = document.getElementById("month").value;
+    let date_from = Date.parse(`${year}-${month}-01`);
+    let date_to = Date.parse(`${year}-${month}-${last_day_of_month(year,month)}`);
+    let filtered_operations = operations.filter(x => Date.parse(x.date) >= date_from && Date.parse(x.date) <= date_to);
+    await operations_table(filtered_operations);
+}
+
 
 async function unmark_radios() {
     let radios = document.getElementsByName('radio_btn');
@@ -147,7 +181,10 @@ async function unmark_radios() {
 document.getElementById("remove_button").addEventListener("click", delete_opr);
 document.getElementById("confirm_btn").addEventListener("click", add_or_change_prediction);
 document.getElementById("add_button").addEventListener("click", unmark_radios);
-document.getElementById("date").addEventListener("click", load_predictions);
+document.getElementById("date").addEventListener("change", load_predictions);
+document.getElementById("categories_select").addEventListener("change", load_predictions);
+document.getElementById("filter").addEventListener("click", filter);
+
 const user = document.getElementById("username").textContent;
 let operations = await get_operations(user);
 let predictions = await get_predictions(user);

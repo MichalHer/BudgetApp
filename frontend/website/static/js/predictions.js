@@ -2,7 +2,7 @@ import {get_predictions, delete_prediction, add_prediction, change_prediction} f
 import {get_categories} from "./categories_api.js";
 import {get_accounts} from "./accounts_api.js";
 
-async function predictions_table(){
+async function predictions_table(predictions){
     let table_html = '<thead><tr>\
                     <th scope="col" width="5%"></th>\
                     <th scope="col" width="10%">ID przewidywania</th>\
@@ -57,7 +57,7 @@ async function modal_init(){
 }
 
 async function load_page(){
-    await predictions_table();
+    await predictions_table(predictions);
     await modal_init();
 }
 
@@ -111,9 +111,24 @@ async function unmark_radios() {
     }
 }
 
+function last_day_of_month(year, month){
+    return new Date(year, month, 0).getDate();
+}
+
+async function filter(){
+    let year = document.getElementById("year").value;
+    let month = document.getElementById("month").value;
+    let date_from = Date.parse(`${year}-${month}-01`);
+    let date_to = Date.parse(`${year}-${month}-${last_day_of_month(year,month)}`);
+    let filtered_predictions = predictions.filter(x => Date.parse(x.date) >= date_from && Date.parse(x.date) <= date_to);
+    await predictions_table(filtered_predictions);
+}
+
+
 document.getElementById("remove_button").addEventListener("click", delete_pred);
 document.getElementById("confirm_btn").addEventListener("click", add_or_change_prediction);
 document.getElementById("add_button").addEventListener("click", unmark_radios);
+document.getElementById("filter").addEventListener("click", filter);
 const user = document.getElementById("username").textContent;
 let predictions = await get_predictions(user);
 let categories = await get_categories(user);
