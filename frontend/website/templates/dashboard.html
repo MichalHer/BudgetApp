@@ -1,15 +1,16 @@
 {% extends 'app_base.html' %}
 {% block title %}Budgetapp - Dashboard{% endblock %}
 {% block body %} 
-        <h1>Dashboard</h1>
-        <p>Witaj {{ current_user.username }}</p>
+        <h1 style="padding:50px">Dashboard</h1>
         <div class="container">
-                <div class="row-cols-1">
+                <div class="row" style="margin-bottom:10%">
+                        <h2>Prognoza budżetu w przyszłości</h2>
+                        <canvas id="chartContainer"></canvas>
+                </div>
+                <div class="row" style="margin-bottom:10%">
                         <div class="col">
                                 <div>
-                                        <span>
-                                                <h2>Stan Kont</h2>
-                                        </span>
+                                        <h2>Stan Kont</h2>
                                         <div class="table-responsive">
                                                 <table class="table table-striped" id="dashboard_accounts_table">
                                                 </table>
@@ -21,9 +22,7 @@
                 <div class="row">
                         <div class="col">
                                 <div>
-                                        <span>
-                                                <h2>Szczegółowe podsumowanie miesiąca</h2>
-                                        </span>
+                                        <h2>Szczegółowe podsumowanie miesiąca</h2>
                                         <div class="table-responsive">
                                                 <table class="table table-striped" id="dashboard_current_month">
                                                         <thead>
@@ -54,5 +53,5 @@
         </div>
 {% endblock body %}  
 {% block scripts %}
-    <script type="module" src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+        <script type="module" src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock scripts %}
