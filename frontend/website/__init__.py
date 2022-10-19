@@ -13,6 +13,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'gfsadfdfdsas56fds69f84ds8f4'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
@@ -20,7 +21,9 @@ def create_app():
     from .auth import auth
     from .views import views
     from .budgetapp import budgetapp
+    from .api_connection import api_connection
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(budgetapp, url_prefix='/budgetapp')
+    app.register_blueprint(api_connection, url_prefix='/api_connection')
     return app

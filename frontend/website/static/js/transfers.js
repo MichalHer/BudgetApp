@@ -1,6 +1,7 @@
 import {get_accounts} from "./accounts_api.js";
 import {get_transfers, delete_transfer, add_transfer, change_transfer} from "./transfers_api.js";
 
+
 async function transfers_table(transfers){
     var table_html = '<thead><tr>\
                     <th scope="col" width="5%"></th>\
@@ -40,7 +41,7 @@ async function delete_trans() {
         }
     }
     if (id != null){
-        await delete_transfer(user, id);
+        await delete_transfer(id);
         transfers = transfers.filter(x => x.ID_Tr != id);
         if (document.getElementById("month").value == 0 && document.getElementById("year").value == ""){
             await transfers_table(transfers);
@@ -65,7 +66,7 @@ async function add_or_change_trans() {
         }
     }
     if (id != null){
-        new_transfer = await change_transfer(user, from_account, to_account, date, value, id);
+        new_transfer = await change_transfer(from_account, to_account, date, value, id);
         transfers = transfers.filter(x => x.ID_Tr != id);
         transfers.push(new_transfer);
         if (document.getElementById("month").value == 0 && document.getElementById("year").value == ""){
@@ -74,7 +75,7 @@ async function add_or_change_trans() {
             await filter();
         }
     } else {
-        new_transfer = await add_transfer(user, from_account, to_account, date, value);
+        new_transfer = await add_transfer(from_account, to_account, date, value);
         transfers.push(new_transfer);
         if (document.getElementById("month").value == 0 && document.getElementById("year").value == ""){
             await transfers_table(transfers);
@@ -92,7 +93,7 @@ async function unmark_radios() {
 }
 
 async function modal_init(){
-    var accounts_sel = '<option selected>Wybierz konto</option>'
+    var accounts_sel = '<option selected></option>'
     if (accounts.length != 0){
         accounts.forEach(element => {
         accounts_sel += `<option name="acc_sel" value="${element.ID_Acc}">${element.currency} ${element.name}</option>`;
@@ -124,7 +125,7 @@ document.getElementById("add_button").addEventListener("click", unmark_radios);
 document.getElementById("filter").addEventListener("click", filter);
 let user = document.getElementById("username").textContent;
 let accounts = await get_accounts(user);
-let transfers = await get_transfers(user);
+let transfers = await get_transfers();
 window.onload = transfers_table(transfers);
 window.onload = modal_init();
 
