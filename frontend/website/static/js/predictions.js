@@ -36,7 +36,7 @@ async function predictions_table(predictions){
 }
 
 async function modal_init(){
-    let accounts_sel = '<option selected>Wybierz konto</option>'
+    let accounts_sel = '<option selected></option>'
     if (accounts.length != 0){
         accounts.forEach(element => {
         accounts_sel += `<option name="acc_sel" value="${element.ID_Acc}">${element.currency} ${element.name}</option>`;
@@ -44,7 +44,7 @@ async function modal_init(){
     }
     document.getElementById('accounts_select').innerHTML=accounts_sel;
 
-    let categories_sel = '<option selected>Wybierz kategorię</option>'
+    let categories_sel = '<option selected></option>'
     if (categories.length != 0){
         categories.forEach(element => {
         categories_sel += `<option name="cat_sel" value="${element.ID_Cat}">${element.name}</option>`;
@@ -71,9 +71,9 @@ async function delete_pred() {
         }
     }
     if (id != null){
-        await delete_prediction(user, id);
+        await delete_prediction(id);
         predictions = predictions.filter(x => x.ID_Pred != id);
-        await predictions_table();
+        await predictions_table(predictions);
     }
 }
 
@@ -93,14 +93,14 @@ async function add_or_change_prediction() {
             }
         }
         if (id != null){
-            new_prediction = await change_prediction(user, category_id, account_id, prediction_date, prediction_pote, prediction_value, id);
+            new_prediction = await change_prediction(category_id, account_id, prediction_date, prediction_pote, prediction_value, id);
             predictions = predictions.filter(x => x.ID_Pred != id);
             predictions.push(new_prediction);
-            await predictions_table();
+            await predictions_table(predictions);
         } else {
-            new_prediction = await add_prediction(user, category_id, account_id, prediction_date, prediction_pote, prediction_value);
+            new_prediction = await add_prediction(category_id, account_id, prediction_date, prediction_pote, prediction_value);
             predictions.push(new_prediction);
-            await predictions_table();
+            await predictions_table(predictions);
         }
 }
 
@@ -130,7 +130,7 @@ document.getElementById("confirm_btn").addEventListener("click", add_or_change_p
 document.getElementById("add_button").addEventListener("click", unmark_radios);
 document.getElementById("filter").addEventListener("click", filter);
 const user = document.getElementById("username").textContent;
-let predictions = await get_predictions(user);
+let predictions = await get_predictions();
 let categories = await get_categories(user);
 let accounts = await get_accounts(user);
 window.onload = load_page(user)

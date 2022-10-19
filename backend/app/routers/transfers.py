@@ -13,7 +13,7 @@ router = APIRouter(
 )
 
 #create transfer
-@router.post("/", response_model=schemas.Transfer)
+@router.post("/", status_code=201, response_model=schemas.Transfer)
 def create_transfer(transfer:schemas.TransferIn, db:Session = Depends(get_db), current_user:models.User = Depends(oauth2.get_current_user)):
     new_transfer = models.Transfer(**transfer.dict())
     accounts = db.query(models.Account).filter(or_((models.Account.ID_Acc == new_transfer.from_account),

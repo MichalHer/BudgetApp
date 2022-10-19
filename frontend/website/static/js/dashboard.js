@@ -145,7 +145,6 @@ function get_twelve_months_budget(dates){
         result.push(tmp_predictions_sum+previous_sum);
         previous_sum = tmp_predictions_sum+previous_sum;
     }
-    console.log(result);
     return result;
 }
 
@@ -156,8 +155,8 @@ document.getElementById("date_from").value = date_range[0];
 document.getElementById("date_to").value = date_range[1];
 
 const user = document.getElementById("username").textContent;
-const transfers = await get_transfers(user);
-const predictions = await get_predictions(user);
+const transfers = await get_transfers();
+const predictions = await get_predictions();
 const operations = await get_operations(user);
 const accounts = await get_accounts(user);
 var current_accounts_value = 0;
