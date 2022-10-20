@@ -120,3 +120,53 @@ def api_delete_patch_predictions(id: int):
         else:
             print('nie ok')
             return 'Content-Type not supported!'
+        
+#############################
+# Operations methods
+#############################
+@api_connection.route('/operations', methods=['GET', 'POST'])
+@login_required
+def api_get_post_operations():
+    bearer_token = get_token(current_user.username, current_user.apikey)
+    header = {'Authorization': f"{bearer_token['token_type']} {bearer_token['access_token']}"}
+    if request.method == 'GET':
+        r = requests.get(f'{API_URL}/operations', headers=header)
+        if r.status_code == 200:
+            return r.json()
+        else:
+            return 'Something goes wrong!'
+    
+    if request.method == 'POST':
+        content_type = request.headers.get('Content-Type')
+        if (content_type == 'application/json'):
+            content = request.json
+            header['Content-Type'] = 'application/json'
+            r = requests.post(f'{API_URL}/operations', headers=header, json=content)
+            if r.status_code == 201:
+                return r.json()
+            else:
+                return 'Something goes wrong!'
+        else:
+            return 'Content-Type not supported!'
+        
+@api_connection.route('/operations/<id>', methods=['GET','DELETE', 'PATCH'])
+@login_required
+def api_delete_patch_operations(id: int):
+    bearer_token = get_token(current_user.username, current_user.apikey)
+    header = {'Authorization': f"{bearer_token['token_type']} {bearer_token['access_token']}"}
+    if request.method == 'DELETE':
+        r = requests.delete(f'{API_URL}/operations/{id}', headers=header)
+        if r.status_code == 204:
+            return Response(status=r.status_code)
+        else:
+            return 'Something goes wrong!'
+        
+    if request.method == 'PATCH':
+        content_type = request.headers.get('Content-Type')
+        if (content_type == 'application/json'):
+            content = request.json
+            header['Content-Type'] = 'application/json'
+            r = requests.patch(f'{API_URL}/operations/{id}', headers=header, json=content)
+            return r.json()
+        else:
+            return 'Content-Type not supported!'

@@ -1,14 +1,3 @@
-const api_url = "http://192.168.1.2:8000";
-
-async function login(username, password) {
-    const body = new FormData();
-    body.append("username", username);
-    body.append("password", password);
-    const response = await fetch(api_url + '/login', {method: "POST", body: body})
-    const data = await response.json(); 
-    return data;
-}
-
 export async function get_predictions() {
     const response = await fetch('/api_connection/predictions',{method: "GET"})
     const data = await response.json(); 
