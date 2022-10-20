@@ -25,18 +25,18 @@ async def get_account_owners(id: int, db: Session = Depends(get_db), current_use
     if current_user not in account.owners: exceptions.raise_option_not_allowed()
     return account
 
-# change account name
-@router.put("/{id}", response_model=schemas.AccountOut)
-async def change_account_name(new_name: schemas.AccountCreate ,id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+# change account
+@router.patch("/{id}", response_model=schemas.AccountOut)
+async def change_account(new_attributes: schemas.AccountPatch ,id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     account_query = db.query(models.Account).filter(models.Account.ID_Acc == id)
-
     account = account_query.first()
     if not account: exceptions.raise_account_does_not_exists()
     if current_user not in account.owners: exceptions.raise_option_not_allowed()
-
-    account_query.update(new_name.dict(), synchronize_session=False)
+    new_attributes_dict = new_attributes.dict()
+    keys_to_delete = [x for x in new_attributes_dict.keys() if new_attributes_dict[x] == None]
+    [new_attributes_dict.pop(x) for x in keys_to_delete]
+    account_query.update(new_attributes_dict, synchronize_session=False)
     db.commit()
-    
     db.refresh(account)
     return account
     

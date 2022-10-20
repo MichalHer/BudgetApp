@@ -4,6 +4,8 @@ from datetime import datetime, date
 
 class UserAttaching(BaseModel):
     nick: str
+    class Config:
+        orm_mode=True
 
 class UserCreate(BaseModel):
     nick: str
@@ -24,6 +26,10 @@ class UserOut(BaseModel):
 class AccountCreate(BaseModel):
     name: str
     currency: str
+    
+class AccountPatch(BaseModel):
+    name: Optional[str]
+    currency: Optional[str]
 
 class Account(BaseModel):
     ID_Acc: int
@@ -33,7 +39,7 @@ class Account(BaseModel):
         orm_mode=True
 
 class AccountOut(Account):
-    owners: List[UserOut]
+    owners: List[UserAttaching]
     class Config:
         orm_mode=True
 

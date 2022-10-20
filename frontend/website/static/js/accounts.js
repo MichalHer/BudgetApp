@@ -31,7 +31,7 @@ async function delete_acc() {
         }
     }
     if (id != null){
-        await delete_account(user, id);
+        await delete_account(id);
         accounts = accounts.filter(x => x.ID_Acc != id);
         await accounts_table();
     }
@@ -41,23 +41,23 @@ async function add_or_change_acc() {
     const account_name = document.getElementById("account_name").value;
     const currency = document.getElementById("currency").value;
     let new_account = null;
-    if (account_name != '' && account_name != null) {
-        const user = document.getElementById("username").textContent;
-        let radios = document.getElementsByName('radio_btn');
-        let id = null;
-        for (let i of radios){
-            if (i.checked) {
-                id = i.value;
-            }
-        }
-        if (id != null){
-            new_account = await change_account(user, account_name, id, currency);
-            accounts.push(new_account);
-        } else {
-            new_account = await add_account(user, account_name, currency);
-            accounts.push(new_account);
+    const user = document.getElementById("username").textContent;
+    let radios = document.getElementsByName('radio_btn');
+    let id = null;
+    for (let i of radios){
+        if (i.checked) {
+            id = i.value;
         }
     }
+    if (id != null){
+        new_account = await change_account(account_name, id, currency);
+        accounts = accounts.filter(x => x.ID_Acc != id)
+        accounts.push(new_account);
+    } else {
+        new_account = await add_account(account_name, currency);
+        accounts.push(new_account);
+    }
+    
     console.log(new_account);
     await accounts_table();
 }
@@ -73,6 +73,6 @@ document.getElementById("remove_button").addEventListener("click", delete_acc);
 document.getElementById("confirm_btn").addEventListener("click", add_or_change_acc);
 document.getElementById("add_button").addEventListener("click", unmark_radios);
 const user = document.getElementById("username").textContent;
-let accounts = await get_accounts(user)
+let accounts = await get_accounts()
 window.onload = accounts_table();
 
