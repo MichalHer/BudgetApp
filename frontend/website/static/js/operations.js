@@ -188,6 +188,6 @@ document.getElementById("filter").addEventListener("click", filter);
 const user = document.getElementById("username").textContent;
 let operations = await get_operations();
 let predictions = await get_predictions();
-let categories = await get_categories(user);
+let categories = await get_categories();
 let accounts = await get_accounts(user);
 window.onload = load_page();

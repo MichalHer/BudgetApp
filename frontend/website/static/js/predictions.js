@@ -131,6 +131,6 @@ document.getElementById("add_button").addEventListener("click", unmark_radios);
 document.getElementById("filter").addEventListener("click", filter);
 const user = document.getElementById("username").textContent;
 let predictions = await get_predictions();
-let categories = await get_categories(user);
+let categories = await get_categories();
 let accounts = await get_accounts(user);
 window.onload = load_page(user)

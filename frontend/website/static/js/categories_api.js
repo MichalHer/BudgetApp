@@ -1,42 +1,21 @@
-const api_url = "http://192.168.1.2:8000";
-
-async function login(username, password) {
-    const body = new FormData();
-    body.append("username", username);
-    body.append("password", password);
-    const response = await fetch(api_url + '/login', {method: "POST", body: body})
-    const data = await response.json(); 
-    return data;
-}
-
-export async function get_categories(username) {
-    const {token_type, access_token} = await login(username, apikey);
-    let auth = {"Authorization": token_type + ' ' + access_token};
-    const response = await fetch(api_url + '/categories',{method: "GET", headers: auth})
+export async function get_categories() {
+    const response = await fetch('/api_connection/categories',{method: "GET"})
     const data = await response.json(); 
     return data
 }
 
-export async function delete_category(username, id) {
-    const {token_type, access_token} = await login(username, apikey);
-    let auth = {"Authorization": token_type + ' ' + access_token,
-        'Content-Type':'application/json'};
-    let body = JSON.stringify({nick: username});
-    console.log(body);
-    const response = await fetch(api_url + '/categories/' + id,{
+export async function delete_category(id) {
+    let auth = {'Content-Type':'application/json'};
+    const response = await fetch('/api_connection/categories/' + id,{
         method:"DELETE", 
         headers:auth, 
-        body: body
     });
 }
 
-export async function add_category(username, category_name) {
-    const {token_type, access_token} = await login(username, apikey);
-    let headers = {"Authorization": token_type + ' ' + access_token,
-        'Content-Type':'application/json'};
+export async function add_category(category_name) {
+    let headers = {'Content-Type':'application/json'};
     let body = JSON.stringify({name: category_name});
-    console.log(body);
-    const response = await fetch(api_url + '/categories',{
+    const response = await fetch('/api_connection/categories',{
         method:"POST", 
         headers:headers, 
         body: body
@@ -45,13 +24,12 @@ export async function add_category(username, category_name) {
     return data
 }
 
-export async function change_category(username, category_name, id) {
-    const {token_type, access_token} = await login(username, apikey);
-    let headers = {"Authorization": token_type + ' ' + access_token,
-        'Content-Type':'application/json'};
-    let body = JSON.stringify({name: category_name});
-    console.log(body);
-    const response = await fetch(api_url + '/categories/' + id,{
+export async function change_category(category_name, id) {
+    let headers = {'Content-Type':'application/json'};
+    let json = JSON.parse("{}");
+    if (category_name != "") json.name = category_name;
+    let body = JSON.stringify(json);
+    const response = await fetch('/api_connection/categories/' + id,{
         method:"PATCH", 
         headers:headers, 
         body: body
@@ -59,5 +37,3 @@ export async function change_category(username, category_name, id) {
     const data = await response.json(); 
     return data
 }
-
-let apikey = document.getElementById('apikey').textContent;

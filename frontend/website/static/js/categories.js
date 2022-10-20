@@ -23,7 +23,7 @@ async function delete_cat() {
         }
     }
     if (id != null){
-        await delete_category(user, id);
+        await delete_category(id);
         categories = categories.filter(x => x.ID_Cat != id);
         await categories_table();
     }
@@ -42,11 +42,11 @@ async function add_or_change_cat() {
             }
         }
         if (id != null){
-            new_category = await change_category(user, category_name, id);
+            new_category = await change_category(category_name, id);
             categories = categories.filter(x => x.ID_Cat != id);
             categories.push(new_category);
         } else {
-            new_category = await add_category(user, category_name);
+            new_category = await add_category(category_name);
             categories.push(new_category);
         }
     }
@@ -64,6 +64,6 @@ document.getElementById("remove_button").addEventListener("click", delete_cat);
 document.getElementById("confirm_btn").addEventListener("click", add_or_change_cat);
 document.getElementById("add_button").addEventListener("click", unmark_radios);
 const user = document.getElementById("username").textContent;
-let categories = await get_categories(user);
+let categories = await get_categories();
 window.onload = categories_table(user);
 
