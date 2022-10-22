@@ -19,7 +19,8 @@ def create_transfer(transfer:schemas.TransferIn, db:Session = Depends(get_db), c
     accounts = db.query(models.Account).filter(or_((models.Account.ID_Acc == new_transfer.from_account),
                                                    (models.Account.ID_Acc == new_transfer.to_account))).all()
     db.commit()
-    [exceptions.raise_option_not_allowed() for x in accounts if current_user not in x.owners]
+    for x in accounts: 
+        if current_user not in x.owners: exceptions.raise_option_not_allowed()
     if len(accounts) != 2: exceptions.raise_option_not_allowed()
     new_transfer.owner = current_user.ID_Usr
     db.add(new_transfer)
@@ -54,9 +55,8 @@ def edit_transfer(id:int, new_attributes:schemas.TransferChange, db:Session = De
     if transfer.owner != current_user.ID_Usr:
         exceptions.raise_option_not_allowed()
     new_attributes_dict = new_attributes.dict()
-    keys_to_delete = []
-    [keys_to_delete.append(x) for x in new_attributes_dict.keys() if new_attributes_dict[x] == None]
-    [new_attributes_dict.pop(x) for x in keys_to_delete]
+    keys_to_delete = [x for x in new_attributes_dict.keys() if new_attributes_dict[x] == None]
+    for x in keys_to_delete: new_attributes_dict.pop(x)
     transfer_query.update(new_attributes_dict,synchronize_session=False)
     db.commit()
     db.refresh(transfer)

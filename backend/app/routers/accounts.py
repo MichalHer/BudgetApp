@@ -34,7 +34,7 @@ async def change_account(new_attributes: schemas.AccountPatch ,id: int, db: Sess
     if current_user not in account.owners: exceptions.raise_option_not_allowed()
     new_attributes_dict = new_attributes.dict()
     keys_to_delete = [x for x in new_attributes_dict.keys() if new_attributes_dict[x] == None]
-    [new_attributes_dict.pop(x) for x in keys_to_delete]
+    for x in keys_to_delete: new_attributes_dict.pop(x)
     account_query.update(new_attributes_dict, synchronize_session=False)
     db.commit()
     db.refresh(account)
