@@ -69,10 +69,13 @@ function current_month_summary(predictions) {
                 color = "table-success";
             } else if (balance < 0){
                 color = "table-danger";
+            } else if (balance > 0) {
+                current_planned_outcomes +=  parseFloat(balance);
             }
         } else {
             if (balance < 0){
                 color = "table-danger";
+                if (operations_value == 0) current_planned_outcomes += parseFloat(balance);
             } else if (balance >= 0){
                 color = "table-success";
             }
@@ -130,8 +133,8 @@ function get_twelve_months(){
 }
 
 function get_twelve_months_budget(dates){
-    var result = [current_accounts_value]
-    var previous_sum = current_accounts_value;
+    var result = [current_accounts_value-current_planned_outcomes]
+    var previous_sum = current_accounts_value-current_planned_outcomes;
     for (let x = 1; x < dates.length; x++){
         let date = dates[x];
         let date_array = date.split("-");
@@ -159,7 +162,10 @@ const transfers = await get_transfers();
 const predictions = await get_predictions();
 const operations = await get_operations(user);
 const accounts = await get_accounts(user);
+
 var current_accounts_value = 0;
+var current_planned_outcomes = 0;
+
 window.onload = current_month_summary_filter();
 window.onload = await get_accounts_summary();
 

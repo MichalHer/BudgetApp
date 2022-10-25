@@ -2,13 +2,16 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-
+from os import path
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
 DB_NAME = "database.db"
-
+def create_db(app):
+    if not path.exists(f'website/{DB_NAME}'):
+        db.create_all(app=app)
+        
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'gfsadfdfdsas56fds69f84ds8f4'
@@ -26,4 +29,6 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(budgetapp, url_prefix='/budgetapp')
     app.register_blueprint(api_connection, url_prefix='/api_connection')
+    from .models import User
+    create_db(app)
     return app
