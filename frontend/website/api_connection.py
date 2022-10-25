@@ -48,13 +48,11 @@ def api_get_post_transfers():
             r = requests.post(f'{API_URL}/transfers', headers=header, json=content)
             return r.json()
         else:
-            print('nie ok')
             return 'Content-Type not supported!'
         
 @api_connection.route('/transfers/<id>', methods=['DELETE', 'PATCH'])
 @login_required
 def api_del_patch_transfers(id:int):
-    print(request.method)
     bearer_token = get_token(current_user.username, current_user.apikey)
     header = {'Authorization': f"{bearer_token['token_type']} {bearer_token['access_token']}"}
     if request.method == 'DELETE': 
@@ -69,7 +67,6 @@ def api_del_patch_transfers(id:int):
             r = requests.patch(f'{API_URL}/transfers/{id}', headers=header, json=content)
             return r.json()
         else:
-            print('nie ok')
             return 'Content-Type not supported!'
 
 #############################
@@ -98,7 +95,6 @@ def api_get_post_predictions():
             else:
                 return 'Something goes wrong!'
         else:
-            print('nie ok')
             return 'Content-Type not supported!'
 
 @api_connection.route('/predictions/<id>', methods=['DELETE', 'PATCH'])
@@ -119,7 +115,6 @@ def api_delete_patch_predictions(id: int):
             r = requests.patch(f'{API_URL}/predictions/{id}', headers=header, json=content)
             return r.json()
         else:
-            print('nie ok')
             return 'Content-Type not supported!'
         
 #############################
