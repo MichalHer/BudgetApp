@@ -4,6 +4,7 @@ from . import db, bcrypt, login_manager
 from .models import User
 from .forms import LoginForm, RegisterForm
 import requests
+from .config import API_URL
 
 auth = Blueprint('auth', __name__)
     
@@ -31,7 +32,7 @@ def register():
         api_json = {
             "nick": f"{new_user.username}"
         }
-        r = requests.post("http://127.0.0.1:8000/users", json=api_json,)
+        r = requests.post(f"{API_URL}/users", json=api_json,)
         if r.status_code == 201:
             new_user.apikey = r.json()['password']
             db.session.add(new_user)
