@@ -9,8 +9,9 @@ bcrypt = Bcrypt()
 login_manager = LoginManager()
 DB_NAME = "database.db"
 def create_db(app):
-    if not path.exists(f'website/{DB_NAME}'):
-        db.create_all(app=app)
+    with app.app_context():
+        if not path.exists(f'website/{DB_NAME}'):
+            db.create_all()
         
 def create_app():
     app = Flask(__name__)
