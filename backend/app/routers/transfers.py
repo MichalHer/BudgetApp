@@ -54,9 +54,7 @@ def edit_transfer(id:int, new_attributes:schemas.TransferChange, db:Session = De
         exceptions.raise_option_not_allowed()
     if transfer.owner != current_user.ID_Usr:
         exceptions.raise_option_not_allowed()
-    new_attributes_dict = new_attributes.dict()
-    keys_to_delete = [x for x in new_attributes_dict.keys() if new_attributes_dict[x] == None]
-    for x in keys_to_delete: new_attributes_dict.pop(x)
+    new_attributes_dict = {key:val for key,val in new_attributes.dict().items() if val != None}
     transfer_query.update(new_attributes_dict,synchronize_session=False)
     db.commit()
     db.refresh(transfer)
