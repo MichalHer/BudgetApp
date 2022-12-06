@@ -1,4 +1,3 @@
-from typing import ParamSpecArgs
 from flask import Flask, Blueprint, request, Response
 from flask_login import login_required, current_user
 from .config import API_URL
