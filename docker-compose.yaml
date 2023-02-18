@@ -1,10 +1,12 @@
 version: '3'
 services:
-  frontend:
-    build: ./frontend
+  client:
+    build: ./Client
     restart: unless-stopped
     ports:
       - 5000:5000
+    env_file:
+      - ./Client/.env
   postgres:
     image: postgres
     restart: unless-stopped
@@ -16,14 +18,14 @@ services:
     volumes:
       - postgres-db:/var/lib/postgresql/data
   api:
-    build: ./backend
+    build: ./api
     restart: unless-stopped
     depends_on:
       - postgres
     ports:
       - 8000:8000
     env_file:
-      - ./backend/.env
+      - ./API/.env
 
 volumes:
   postgres-db:
