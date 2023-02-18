@@ -1,4 +1,0 @@
---delete
-select *
-from accounts
-where "ID_Acc" not in (select distinct account_id from association)
