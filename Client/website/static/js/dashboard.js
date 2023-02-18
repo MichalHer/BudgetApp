@@ -5,7 +5,7 @@ import {get_accounts} from "./accounts_api.js";
 import "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js";
 
 async function get_currency_from_nbp(code){
-    const response = await fetch(`http://api.nbp.pl/api/exchangerates/rates/A/${code}/`, {method:'GET', 'Content-Type':'application/json'});
+    const response = await fetch(`https://api.nbp.pl/api/exchangerates/rates/A/${code}/`, {method:'GET', 'Content-Type':'application/json'});
     const data = await response.json();
     return data;
 }
