@@ -25,10 +25,10 @@ Reszta konfiguracji przebiega w docker-compose.yaml
 ## 2. Uruchomienie aplikacji
 
 aplikację uruchamia się przy użyciu
-`docker compose up -d`
+`docker-compose up -d`
 
 przy update:
-`docker compose up --build -d`
+`docker-compose up --build -d`
 
-Łączenie z klientem na ustawionym porcie, domyślnie 5000
+Łączenie z klientem na ustawionym porcie, domyślnie 5000. <br>
 Zalecane użycie Nginx dla konfiguracji publicznej
