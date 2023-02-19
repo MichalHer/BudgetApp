@@ -15,7 +15,7 @@ jwt_expiring_minutes=30
 
 Przykładowy plik .env dla Client:
 ```
-API_URL=http://<adres_ip_hosta>:<port ustawiony w pliku yaml>
+API_URL=http://api:<port ustawiony w pliku yaml>
 ```
 
 Reszta konfiguracji przebiega w docker-compose.yaml
