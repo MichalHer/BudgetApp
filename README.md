@@ -32,3 +32,8 @@ przy update:
 
 Łączenie z klientem na ustawionym porcie, domyślnie 5000. <br>
 Zalecane użycie Nginx dla konfiguracji publicznej
+
+## 3. Rejestracja użytkownika
+
+Rejestracja użytkownika odbywa się poprzez url `<ip_serwera>:<port>/auth/register`<br>
+Domyślnie, na stronie logowania nie ma linku do rejestracji
