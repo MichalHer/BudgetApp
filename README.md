@@ -1,7 +1,7 @@
 ## 1. Zmienne środowiskowe
-Przed buildem należy utworzyć pliki .env w folderze "API" oraz "Client"
+Przed buildem należy utworzyć pliki .env w folderze "API"
 
-Przykładowy plik .env dla API:
+Przykładowy plik .env dla API: 
 ```
 db_username=postgres
 db_password=passwd <zgodnie z plikiem yaml>
@@ -11,11 +11,6 @@ db_port=5432
 jwt_secret_key=f95df+f489d846fgYGdf44fdsfsd894984gg8gdsf9d8s4fdOUDG
 jwt_algorithm=HS256
 jwt_expiring_minutes=30
-```
-
-Przykładowy plik .env dla Client:
-```
-API_URL=http://api:<port ustawiony w pliku yaml>
 ```
 
 Reszta konfiguracji przebiega w docker-compose.yaml
