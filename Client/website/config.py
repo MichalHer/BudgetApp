@@ -1,4 +1,1 @@
-import os
-
-API_URL = os.getenv('API_URL')
-
+API_URL = "http://api:8000"
