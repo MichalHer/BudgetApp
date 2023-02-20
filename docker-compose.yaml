@@ -5,8 +5,6 @@ services:
     restart: unless-stopped
     ports:
       - 5000:5000
-    env_file:
-      - ./Client/.env
   postgres:
     image: postgres
     restart: unless-stopped
