@@ -1,7 +1,7 @@
 ## 1. Zmienne środowiskowe
-Przed buildem należy utworzyć pliki .env w folderze "API"
+Przed buildem należy utworzyć plik .env w folderze "API"
 
-Przykładowy plik .env dla API: 
+Przykład: 
 ```
 db_username=postgres
 db_password=passwd <zgodnie z plikiem yaml>
