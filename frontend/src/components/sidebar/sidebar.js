@@ -17,7 +17,7 @@ const Nav = styled.div`
 `;
 
 const NavIcon = styled(Link)`
-    margin-top: 2.5rem;
+    margin-top: 3rem;
     margin-left: 2rem;
     font-size 2rem;
     height: 80px;
