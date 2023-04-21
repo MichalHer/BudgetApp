@@ -3,6 +3,8 @@ import * as RiIcons from 'react-icons/ri'
 import * as AiIcons from 'react-icons/ai'
 import * as IoIcons from 'react-icons/io'
 import * as MdIcons from 'react-icons/md'
+import * as GiIcons from 'react-icons/gi'
+import * as TbIcons from 'react-icons/tb'
 
 
 // Follow this pattern:
@@ -40,16 +42,33 @@ export const SidebarData = [
     {
         title: "Operations",
         path: "/operations",
-        icon: <MdIcons.MdBalance />
+        icon: <GiIcons.GiTakeMyMoney />
     },
     {
         title: "Predictions",
         path: "/predictions",
-        icon: <IoIcons.IoIosPaper />
+        icon: <TbIcons.TbZoomMoney />
     },
     {
         title: "Transfers",
         path: "/transfers",
         icon: <AiIcons.AiOutlineArrowsAlt />
+    },
+    {
+        title: "Investments",
+        path: "/investments",
+        icon: <RiIcons.RiStockLine />,
+        subNav: [
+            {
+                title: "Radar",
+                path: "/investments/radar",
+                icon: <MdIcons.MdRadar />
+            },
+            {
+                title: "Assets Operations",
+                path: "/investments/operations", 
+                icon: <MdIcons.MdAttachMoney />
+            }
+        ]
     }
 ]

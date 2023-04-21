@@ -10,17 +10,17 @@ import { IconContext } from "react-icons/lib";
 
 const Nav = styled.div`
     background: #15171c;
-    height: 80px;
+    height: 50px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
 `;
 
 const NavIcon = styled(Link)`
-    margin-top: 3rem;
-    margin-left: 2rem;
-    font-size 2rem;
-    height: 80px;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    font-size: 20;
+    height: 35px;
     display: flex;
     justify-content: flex-start;
     align-items;
