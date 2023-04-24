@@ -56,7 +56,7 @@ export const SidebarData = [
     },
     {
         title: "Investments",
-        path: "/investments",
+        path: "#",
         icon: <RiIcons.RiStockLine />,
         subNav: [
             {
