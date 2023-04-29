@@ -8,6 +8,8 @@ services:
   postgres:
     image: postgres
     restart: unless-stopped
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_PASSWORD=passwd
       - POSTGRES_DB=BudgetApp
@@ -16,6 +18,8 @@ services:
   api:
     build: ./api
     restart: unless-stopped
+    ports:
+      - 8000:8000
     depends_on:
       - postgres
     env_file:

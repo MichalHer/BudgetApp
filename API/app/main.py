@@ -4,7 +4,7 @@ from .routers import accounts, categories, operations, predictions, transfers, u
 from . import models
 from .database import engine
 
-models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 

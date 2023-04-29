@@ -30,6 +30,7 @@ class Account(Base):
     owners = relationship("User",
                     secondary=association_table,
                     back_populates = "accounts")
+    operations = relationship("Operation", back_populates="accounts")
     
 
 class Transfer(Base):
@@ -48,6 +49,8 @@ class Category(Base):
     ID_Cat  = Column(Integer, primary_key=True)
     name = Column(String(20), nullable=False)
     owner = Column(Integer, ForeignKey("users.ID_Usr", ondelete="CASCADE"), nullable=False)
+    
+    operations = relationship("Operation", back_populates="categories")
 
 class Prediction(Base):
     __tablename__ = "predictions"
@@ -59,7 +62,9 @@ class Prediction(Base):
     account = Column(Integer, ForeignKey("accounts.ID_Acc", ondelete="CASCADE"), nullable=False)
     category = Column(Integer, ForeignKey("categories.ID_Cat"), nullable=False)
     owner = Column(Integer, ForeignKey("users.ID_Usr", ondelete="CASCADE"), nullable=False)
-
+    
+    operations = relationship("Operation", back_populates="predictions")
+    
 class Operation(Base):
     __tablename__ = "operations"
 
@@ -71,3 +76,7 @@ class Operation(Base):
     prediction = Column(Integer, ForeignKey("predictions.ID_Pred"))
     account = Column(Integer, ForeignKey("accounts.ID_Acc", ondelete="CASCADE"), nullable=False)
     category = Column(Integer, ForeignKey("categories.ID_Cat"), nullable=False)
+    
+    predictions = relationship("Prediction", back_populates="operations")
+    accounts = relationship("Account", back_populates="operations")
+    categories = relationship("Category", back_populates="operations")

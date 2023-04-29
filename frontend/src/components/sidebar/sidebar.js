@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import * as FaIcons from 'react-icons/fa';
-import * as AiIcons from 'react-icons/ai';
+import * as ImIcons from 'react-icons/im';
 import { SidebarData } from "./sidebar.data";
 import { SubMenu } from "./sidebar.menu";
 import { IconContext } from "react-icons/lib";
@@ -10,17 +10,17 @@ import { IconContext } from "react-icons/lib";
 
 const Nav = styled.div`
     background: #15171c;
-    height: 50px;
+    height: 60px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
 `;
 
 const NavIcon = styled(Link)`
-    margin-top: 1rem;
-    margin-left: 1rem;
-    font-size: 20;
-    height: 35px;
+    margin-top: 2rem;
+    margin-left: 2rem;
+    font-size: 25px;
+    height: 60px;
     display: flex;
     justify-content: flex-start;
     align-items;
@@ -41,6 +41,9 @@ const SidebarNav = styled.nav`
 
 const SidebarWrap = styled.div`
     width: 100%;
+    overflow:scroll;
+    overflow-y:auto;
+    overflow-x:hidden;
 `;
 
 export const Sidebar = () => {
@@ -52,19 +55,19 @@ export const Sidebar = () => {
         <>
             <IconContext.Provider value={{ color: '#fff' }}>
                 <Nav>
-                <NavIcon to='#'>
-                    <FaIcons.FaBars onClick={showSidebar} />
-                </NavIcon>
+                    <NavIcon to='#'>
+                        <FaIcons.FaBars onClick={showSidebar} />
+                    </NavIcon>
                 </Nav>
                 <SidebarNav sidebar={sidebar}>
-                <SidebarWrap>
-                    <NavIcon to='#'>
-                    <AiIcons.AiOutlineClose onClick={showSidebar} />
-                    </NavIcon>
-                    {SidebarData.map((item, index) => {
-                    return <SubMenu item={item} key={index} />;
-                    })}
-                </SidebarWrap>
+                    <SidebarWrap>
+                        <NavIcon to='#'>
+                        <ImIcons.ImCross onClick={showSidebar} />
+                        </NavIcon>
+                        {SidebarData.map((item, index) => {
+                        return <SubMenu item={item} key={index} />;
+                        })}
+                    </SidebarWrap>
                 </SidebarNav>
             </IconContext.Provider>
         </>

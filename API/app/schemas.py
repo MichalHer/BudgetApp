@@ -72,6 +72,12 @@ class PredictionOut(PredictionIn):
     class Config:
         orm_mode=True
         
+class PredictionChild(BaseModel):
+    ID_Pred: Optional[int]
+    purpose_of_the_expendture: Optional[str]
+    class Config:
+        orm_mode=True
+        
 class PredictionChange(BaseModel):
     value: Optional[float]
     purpose_of_the_expendture: Optional[str]
@@ -93,6 +99,9 @@ class Operation(BaseModel):
 
 class OperationOut(Operation):
     ID_Op: int
+    predictions : Optional[PredictionChild]
+    accounts: AccountOut
+    categories: CreateCategoryOutput
     class Config:
         orm_mode=True
 

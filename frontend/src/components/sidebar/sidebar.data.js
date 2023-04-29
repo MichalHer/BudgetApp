@@ -1,7 +1,7 @@
 import React from 'react';
 import * as RiIcons from 'react-icons/ri'
 import * as AiIcons from 'react-icons/ai'
-import * as IoIcons from 'react-icons/io'
+import * as BiIcons from 'react-icons/bi'
 import * as MdIcons from 'react-icons/md'
 import * as GiIcons from 'react-icons/gi'
 import * as TbIcons from 'react-icons/tb'
@@ -70,5 +70,10 @@ export const SidebarData = [
                 icon: <MdIcons.MdAttachMoney />
             }
         ]
+    },
+    {
+        title: "Logout",
+        path: "/logout",
+        icon: <BiIcons.BiLogOut/>
     }
 ]
