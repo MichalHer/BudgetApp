@@ -23,19 +23,30 @@ def create_operation(operation:schemas.Operation, db:Session = Depends(get_db), 
 #get operations
 @router.get("/", response_model=List[schemas.OperationOut])
 def get_operations(db:Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user), since: Optional[str] = None,
-                   to: Optional[str] = None, category_id:Optional[int]=None, account_id:Optional[int]=None, prediction_id:Optional[int]=None):
+                   to: Optional[str] = None, category_id:Optional[int]=None, account_id:Optional[int]=None, prediction_id:Optional[int]=None,
+                   on_page:Optional[int] = None, current_page:Optional[int] = None):
 
     operations_query = db.query(models.Operation).filter((models.Operation.owner == current_user.ID_Usr))    
     if since != None:
         operations_query = operations_query.filter((models.Operation.date >= since))
     if to != None:
         operations_query = operations_query.filter((models.Operation.date <= to))
+    if category_id != None:
+        operations_query = operations_query.filter((models.Operation.category == category_id))
+    if account_id != None:
+        operations_query = operations_query.filter((models.Operation.account == account_id))
+    if prediction_id != None:
+        operations_query = operations_query.filter((models.Operation.prediction == prediction_id))
+    if on_page != None:
+        operations_query = operations_query.limit(on_page)
+    if current_page != None:
+        operations_query = operations_query.offset((current_page-1)*on_page)
     
     operations = operations_query.all()
     
-    if category_id != None: operations = list(filter(lambda x: x.category == category_id,operations))
-    if account_id != None: operations = list(filter(lambda x: x.account == account_id,operations))
-    if prediction_id != None: operations = list(filter(lambda x: x.prediction == prediction_id,operations))
+    # if category_id != None: operations = list(filter(lambda x: x.category == category_id,operations))
+    # if account_id != None: operations = list(filter(lambda x: x.account == account_id,operations))
+    # if prediction_id != None: operations = list(filter(lambda x: x.prediction == prediction_id,operations))
     return operations
 
 #edit operation

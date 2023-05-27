@@ -8,7 +8,7 @@ const AppLayoutComponent: React.FunctionComponent<IAppLayoutComponentProps> = (p
     return (
         <>
             <Sidebar />
-            <div className='p-5'>
+            <div className='p-2'>
                 <Outlet />
             </div>
         </>

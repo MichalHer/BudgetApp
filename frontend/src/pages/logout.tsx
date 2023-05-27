@@ -2,7 +2,7 @@ import { Component } from "react";
 import { Navigate } from "react-router-dom";
 import OperationsService from "../services/operations.service";
 import IOperation from "../types/operation.type";
-import TableComponent from "../components/table/Table"
+import TableComponent from "../components/table/table"
 import authService from "../services/auth.service";
 type Props = {};
 
